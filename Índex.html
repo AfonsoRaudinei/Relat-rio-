@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparativo de Produtos - Soja</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(180deg, #f5f5f7 0%, #e5e5e7 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Card Section */
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .section-title {
+        font-size: 0.75em;
+        color: #86868b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+
+    /* Form Rows */
+    .form-row {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #e5e5e7;
+    }
+
+    .form-row:last-child {
+        border-bottom: none;
+    }
+
+    .form-row label {
+        flex: 0 0 100px;
+        color: #1d1d1f;
+        font-size: 0.9em;
+    }
+
+    .form-row input[type="text"],
+    .form-row input[type="number"] {
+        flex: 1;
+        border: none;
+        background: transparent;
+        text-align: right;
+        font-size: 0.9em;
+        color: #1d1d1f;
+        padding: 4px 0;
+    }
+
+    .form-row input[type="text"]:focus,
+    .form-row input[type="number"]:focus {
+        outline: none;
+    }
+
+    .form-row input[type="number"] {
+        max-width: 120px;
+    }
+
+    /* Farm Name Container */
+    .farm-name-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        justify-content: flex-end;
+    }
+
+    .farm-name-container input[type="text"] {
+        flex: 1;
+        border: none;
+        background: transparent;
+        text-align: right;
+        font-size: 0.9em;
+        color: #1d1d1f;
+        padding: 4px 8px 4px 0;
+    }
+
+    .logo-btn {
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        flex-shrink: 0;
+        order: 3;
+    }
+
+    .logo-btn:hover {
+        background: #f5f5f7;
+    }
+
+    .logo-btn.hidden {
+        display: none !important;
+    }
+
+    .logo-preview {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        object-fit: cover;
+        display: none;
+        flex-shrink: 0;
+        order: 2;
+    }
+
+    .logo-preview.show {
+        display: block;
+    }
+
+    /* Upload Container */
+    .upload-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .upload-btn-small {
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border: 1px solid #d1d1d6;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .upload-btn-small:hover {
+        background: #f5f5f7;
+        border-color: #86868b;
+    }
+
+    .upload-btn-small.hidden {
+        display: none !important;
+    }
+
+    .upload-preview-small {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        object-fit: cover;
+        display: none;
+        border: 1px solid #e5e5e7;
+    }
+
+    .upload-preview-small.show {
+        display: block;
+    }
+
+    /* Comparison Container */
+    .comparison-item {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 247, 0.98) 100%);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .comparison-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .comparison-controls {
+        display: flex;
+        gap: 4px;
+    }
+
+    .control-btn {
+        width: 24px;
+        height: 24px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 20px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        transition: all 0.2s;
+        color: #86868b;
+        padding: 0;
+    }
+
+    .control-btn:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .close-btn {
+        color: #FF3B30;
+    }
+
+    .close-btn:hover {
+        background: rgba(255, 59, 48, 0.1);
+    }
+
+    .collapse-btn {
+        color: #86868b;
+    }
+
+    .collapse-icon {
+        font-weight: 300;
+        font-size: 24px;
+    }
+
+    .comparison-content {
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .comparison-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+    }
+
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+    }
+
+    .comparison-side {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .side-label {
+        font-size: 0.75em;
+        color: #86868b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .photo-upload {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4/3;
+        background: #f5f5f7;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px dashed #d1d1d6;
+        transition: all 0.2s;
+    }
+
+    .photo-upload:hover {
+        border-color: #007AFF;
+        background: #f0f9ff;
+    }
+
+    .photo-upload input {
+        display: none;
+    }
+
+    .photo-placeholder {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: #86868b;
+    }
+
+    .photo-placeholder-icon {
+        font-size: 2em;
+        margin-bottom: 8px;
+    }
+
+    .photo-placeholder-text {
+        font-size: 0.85em;
+    }
+
+    .photo-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+    }
+
+    .photo-preview.show {
+        display: block;
+    }
+
+    /* Dropdown */
+    select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d1d6;
+        border-radius: 8px;
+        background: white;
+        font-size: 0.9em;
+        color: #1d1d1f;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2386868b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 36px;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #007AFF;
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    /* Textarea */
+    textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #d1d1d6;
+        border-radius: 8px;
+        background: white;
+        font-size: 0.9em;
+        color: #1d1d1f;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        resize: vertical;
+        min-height: 60px;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: #007AFF;
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    textarea::placeholder {
+        color: #86868b;
+    }
+
+    /* Add Button */
+    .add-comparison-btn {
+        background: #e5e5e7;
+        color: #86868b;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.9em;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        margin-top: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .add-comparison-btn:hover {
+        background: #d1d1d6;
+        color: #5e5e63;
+    }
+
+    /* Footer */
+    .footer {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 24px;
+        margin-bottom: 100px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Consultant Container */
+    .consultant-input-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .consultant-input-row input[type="text"] {
+        flex: 1;
+        border: none;
+        background: transparent;
+        text-align: left;
+        font-size: 0.95em;
+        color: #1d1d1f;
+        padding: 8px 0;
+        border-bottom: 1px solid #e5e5e7;
+    }
+
+    .consultant-input-row input[type="text"]:focus {
+        outline: none;
+        border-bottom-color: #007AFF;
+    }
+
+    .consultant-input-row .upload-btn-small {
+        order: 3;
+    }
+
+    .consultant-input-row .upload-preview-small {
+        order: 2;
+    }
+
+    .remove-btn {
+        background: linear-gradient(135deg, #FF3B30 0%, #D70015 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85em;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(255, 59, 48, 0.3);
+        transition: all 0.2s;
+        margin-top: 12px;
+    }
+
+    .remove-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+    }
+
+    /* Floating Button */
+    .floating-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
+        box-shadow: 0 4px 16px rgba(0, 122, 255, 0.4);
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .floating-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+        
+        .floating-btn,
+        .add-comparison-btn,
+        .control-btn,
+        .upload-btn-small {
+            display: none;
+        }
+        
+        .comparison-content.collapsed {
+            max-height: none !important;
+            opacity: 1 !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .comparison-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+
+```
+    <!-- Informações Gerais -->
+    <div class="card">
+        <div class="section-title">Dados do Produtor e Talhão</div>
+        <div class="form-row">
+            <label>Produtor</label>
+            <input type="text" placeholder="Nome do produtor">
+        </div>
+        <div class="form-row">
+            <label>Cidade</label>
+            <input type="text" placeholder="Cidade - UF">
+        </div>
+        <div class="form-row">
+            <label>Fazenda</label>
+            <div class="farm-name-container">
+                <input type="text" placeholder="Nome da fazenda">
+                <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                <img id="logoPreview" class="logo-preview" alt="Logo">
+                <button class="logo-btn" id="logoBtn" onclick="document.getElementById('logoUpload').click()">📷</button>
+            </div>
+        </div>
+        <div class="form-row">
+            <label>Talhão</label>
+            <input type="text" placeholder="Nome do talhão">
+        </div>
+        <div class="form-row">
+            <label>Tamanho (ha)</label>
+            <input type="number" placeholder="0.00" step="0.01" max="9999999">
+        </div>
+    </div>
+
+    <!-- Comparações -->
+    <div id="comparisonsContainer"></div>
+
+    <button class="add-comparison-btn" onclick="addComparison()">
+        + Adicionar
+    </button>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="consultant-input-row">
+            <input type="text" id="consultorNome" placeholder="Nome do consultor">
+            <input type="file" id="consultorUpload" accept="image/*" style="display: none;">
+            <img id="consultorPreview" class="upload-preview-small" alt="Consultor">
+            <button class="upload-btn-small" id="consultorBtn" onclick="document.getElementById('consultorUpload').click()">📷</button>
+        </div>
+    </div>
+</div>
+
+<button class="floating-btn" onclick="window.print()" title="Exportar PDF">🖨️</button>
+
+<script>
+    let comparisonCount = 0;
+
+    // Preview uploads
+    document.getElementById('logoUpload').addEventListener('change', function(e) {
+        const preview = document.getElementById('logoPreview');
+        const btn = document.getElementById('logoBtn');
+        const file = e.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.add('show');
+                btn.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('consultorUpload').addEventListener('change', function(e) {
+        const preview = document.getElementById('consultorPreview');
+        const btn = document.getElementById('consultorBtn');
+        const file = e.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.add('show');
+                btn.classList.add('hidden');
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.add('show');
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function addComparison() {
+        comparisonCount++;
+        const container = document.getElementById('comparisonsContainer');
+        
+        const comparisonHTML = `
+            <div class="comparison-item" id="comparison-${comparisonCount}">
+                <div class="comparison-header">
+                    <div class="section-title">Avaliação ${comparisonCount}</div>
+                    <div class="comparison-controls">
+                        <button class="control-btn collapse-btn" onclick="toggleCollapse(${comparisonCount})" title="Expandir/Recolher">
+                            <span class="collapse-icon">−</span>
+                        </button>
+                        <button class="control-btn close-btn" onclick="removeComparison(${comparisonCount})" title="Remover">×</button>
+                    </div>
+                </div>
+                
+                <div class="comparison-content" id="content-${comparisonCount}">
+                    <div class="comparison-grid">
+                    <div class="comparison-side">
+                        <div class="side-label">Produto Padrão</div>
+                        <div class="photo-upload" onclick="document.getElementById('leftPhoto-${comparisonCount}').click()">
+                            <input type="file" id="leftPhoto-${comparisonCount}" accept="image/*" onchange="handlePhotoUpload(event, 'leftPreview-${comparisonCount}')">
+                            <div class="photo-placeholder">
+                                <div class="photo-placeholder-icon">📷</div>
+                                <div class="photo-placeholder-text">Adicionar Foto</div>
+                            </div>
+                            <img id="leftPreview-${comparisonCount}" class="photo-preview" alt="Foto esquerda">
+                        </div>
+                        <select>
+                            <option value="">Estádio Fenológico</option>
+                            <option value="VE">VE - Emergência</option>
+                            <option value="VC">VC - Cotilédones</option>
+                            <option value="V1">V1 - Primeiro nó</option>
+                            <option value="V2">V2 - Segundo nó</option>
+                            <option value="V3">V3 - Terceiro nó</option>
+                            <option value="V4">V4 - Quarto nó</option>
+                            <option value="V5">V5 - Quinto nó</option>
+                            <option value="V6">V6 - Sexto nó</option>
+                            <option value="R1">R1 - Floração</option>
+                            <option value="R2">R2 - Floração Plena</option>
+                            <option value="R3">R3 - Início Formação Vagem</option>
+                            <option value="R4">R4 - Vagem Formada</option>
+                            <option value="R5">R5 - Início Enchimento Grão</option>
+                            <option value="R6">R6 - Grão Cheio</option>
+                            <option value="R7">R7 - Início Maturação</option>
+                            <option value="R8">R8 - Maturação Plena</option>
+                        </select>
+                        <textarea placeholder="Anotações da avaliação..." rows="3"></textarea>
+                    </div>
+
+                    <div class="comparison-side">
+                        <div class="side-label">Produto Testado</div>
+                        <div class="photo-upload" onclick="document.getElementById('rightPhoto-${comparisonCount}').click()">
+                            <input type="file" id="rightPhoto-${comparisonCount}" accept="image/*" onchange="handlePhotoUpload(event, 'rightPreview-${comparisonCount}')">
+                            <div class="photo-placeholder">
+                                <div class="photo-placeholder-icon">📷</div>
+                                <div class="photo-placeholder-text">Adicionar Foto</div>
+                            </div>
+                            <img id="rightPreview-${comparisonCount}" class="photo-preview" alt="Foto direita">
+                        </div>
+                        <select>
+                            <option value="">Estádio Fenológico</option>
+                            <option value="VE">VE - Emergência</option>
+                            <option value="VC">VC - Cotilédones</option>
+                            <option value="V1">V1 - Primeiro nó</option>
+                            <option value="V2">V2 - Segundo nó</option>
+                            <option value="V3">V3 - Terceiro nó</option>
+                            <option value="V4">V4 - Quarto nó</option>
+                            <option value="V5">V5 - Quinto nó</option>
+                            <option value="V6">V6 - Sexto nó</option>
+                            <option value="R1">R1 - Floração</option>
+                            <option value="R2">R2 - Floração Plena</option>
+                            <option value="R3">R3 - Início Formação Vagem</option>
+                            <option value="R4">R4 - Vagem Formada</option>
+                            <option value="R5">R5 - Início Enchimento Grão</option>
+                            <option value="R6">R6 - Grão Cheio</option>
+                            <option value="R7">R7 - Início Maturação</option>
+                            <option value="R8">R8 - Maturação Plena</option>
+                        </select>
+                        <textarea placeholder="Anotações da avaliação..." rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', comparisonHTML);
+    }
+
+    function handlePhotoUpload(event, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = event.target.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.add('show');
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeComparison(id) {
+        const element = document.getElementById(`comparison-${id}`);
+        if (element) {
+            element.remove();
+        }
+    }
+
+    function toggleCollapse(id) {
+        const content = document.getElementById(`content-${id}`);
+        const btn = event.target.closest('.collapse-btn');
+        const icon = btn.querySelector('.collapse-icon');
+        
+        if (content.classList.contains('collapsed')) {
+            content.classList.remove('collapsed');
+            icon.textContent = '−';
+        } else {
+            content.classList.add('collapsed');
+            icon.textContent = '+';
+        }
+    }
+
+    // Add first comparison on load
+    window.addEventListener('load', () => {
+        addComparison();
+    });
+</script>
+```
+
+</body>
+</html>
