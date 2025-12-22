@@ -727,8 +727,13 @@
 
         @media print {
             @page {
-                size: A4;
-                margin: 1cm;
+                size: A4 portrait;
+                margin: 1.5cm 2cm;
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             
             body {
@@ -740,33 +745,60 @@
             .container {
                 max-width: 100%;
                 padding: 0;
+                margin: 0;
             }
             
+            /* Hide interactive elements */
             .floating-btn,
             .add-comparison-btn,
+            .add-menu-container,
             .control-btn,
             .upload-btn-small,
-            .photo-layout-select {
+            .photo-layout-select,
+            .logo-btn {
                 display: none !important;
             }
             
+            /* Expand collapsed content */
             .comparison-content.collapsed {
                 max-height: none !important;
                 opacity: 1 !important;
             }
             
-            .card,
-            .comparison-item,
-            .footer {
-                break-inside: avoid;
+            /* Card spacing and page breaks */
+            .card {
+                margin-bottom: 8px;
                 page-break-inside: avoid;
+                break-inside: avoid;
             }
             
             .comparison-item {
-                margin-bottom: 20px;
+                margin-bottom: 12px;
+                page-break-inside: avoid;
+                break-inside: avoid;
             }
             
-            /* Keep footer links visible and styled in PDF */
+            .conclusion-section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            /* Keep footer on last page */
+            .footer {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-top: 16px;
+                margin-bottom: 0;
+            }
+            
+            /* Ensure photos fit properly */
+            .photo-upload,
+            .photo-preview {
+                max-height: 250px;
+                object-fit: contain;
+            }
+            
+            /* Keep footer links visible */
             .footer-branding {
                 display: flex !important;
             }
@@ -775,6 +807,26 @@
             .branding-link {
                 color: #007AFF !important;
                 text-decoration: underline;
+            }
+            
+            /* Adjust comparison grid for print */
+            .comparison-grid {
+                gap: 12px;
+            }
+            
+            /* Ensure text is readable */
+            body {
+                font-size: 11pt;
+            }
+            
+            .section-title {
+                font-size: 9pt;
+            }
+            
+            /* Prevent widow/orphan lines */
+            p, h1, h2, h3, h4, h5, h6 {
+                orphans: 3;
+                widows: 3;
             }
         }
 
