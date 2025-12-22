@@ -772,10 +772,38 @@
                 break-inside: avoid;
             }
             
+            /* CRITICAL: Keep entire comparison together - never break */
             .comparison-item {
                 margin-bottom: 12px;
-                page-break-inside: avoid;
-                break-inside: avoid;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                page-break-after: auto;
+            }
+            
+            /* Keep comparison content together */
+            .comparison-content {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            
+            /* Keep comparison grid together (2 photos side by side) */
+            .comparison-grid {
+                gap: 12px;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+            }
+            
+            /* Single photo layout */
+            .comparison-grid.single-photo {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Keep each side together */
+            .comparison-side {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
             
             .conclusion-section {
@@ -791,11 +819,17 @@
                 margin-bottom: 0;
             }
             
-            /* Ensure photos fit properly */
+            /* Ensure photos fit properly and stay together */
             .photo-upload,
             .photo-preview {
-                max-height: 250px;
+                max-height: 220px;
                 object-fit: contain;
+                page-break-inside: avoid;
+            }
+            
+            /* Keep textarea with its content */
+            textarea {
+                page-break-inside: avoid;
             }
             
             /* Keep footer links visible */
@@ -807,11 +841,6 @@
             .branding-link {
                 color: #007AFF !important;
                 text-decoration: underline;
-            }
-            
-            /* Adjust comparison grid for print */
-            .comparison-grid {
-                gap: 12px;
             }
             
             /* Ensure text is readable */
