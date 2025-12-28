@@ -3,1191 +3,788 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comparativo de Produtos - Soja</title>
+<title>Relatório de Visita Agrícola</title>
 <style>
-/* --- Estilos idênticos aos originais --- */
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(to bottom,#f5f5f7 0%,#e8e8ea 100%);padding:0;min-height:100vh}
+.header-bar{background:linear-gradient(180deg,#2c2c2e 0%,#1c1c1e 100%);color:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.header-close{font-size:1.3em;cursor:pointer}
+.header-title{font-size:1em;font-weight:500}
+.header-save{color:#007AFF;font-weight:600;cursor:pointer;display:flex;gap:15px;align-items:center}
+.header-action{cursor:pointer;padding:6px 12px;border-radius:6px;transition:background .2s}
+.header-action:hover{background:rgba(0,122,255,.1)}
+.container{max-width:800px;margin:0 auto;background:white}
+.content{padding:0}
+.section{background:white;border-radius:12px;margin:12px 16px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04)}
+.section-title{font-size:.75em;color:#86868b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:15px;font-weight:500}
+.form-group{margin-bottom:0}
+.form-row{display:flex;align-items:center;padding:12px 0;border-bottom:1px solid #e5e5e7}
+.form-row:last-child{border-bottom:none}
+label{flex:0 0 100px;color:#1d1d1f;font-size:1em;font-weight:400}
+input[type="text"],input[type="date"],input[type="number"],textarea,select{flex:1;padding:8px 0;border:none;font-size:1em;color:#1d1d1f;background:transparent;text-align:right}
+input:focus,textarea:focus,select:focus{outline:none}
+textarea{text-align:left;min-height:80px;resize:vertical;padding:12px 0}
+.stage-selector select{font-size:1em;cursor:pointer;appearance:none;background:transparent}
+.stage-display{display:none;background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(245,245,247,.98) 100%);backdrop-filter:blur(10px);border-radius:16px;padding:24px;text-align:center;margin:15px 0;border:1px solid rgba(0,0,0,.05);box-shadow:0 4px 16px rgba(0,0,0,.08),0 8px 32px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.8)}
+.stage-display.active{display:block;animation:slideUp .4s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.stage-icon-large{font-size:3em;margin-bottom:10px}
+.stage-name-large{font-size:1.2em;font-weight:600;color:#1d1d1f;margin-bottom:5px}
+.stage-description-large{font-size:.9em;color:#86868b;margin-bottom:10px}
+.dap-badge{display:inline-block;background:#007AFF;color:white;padding:6px 14px;border-radius:16px;font-weight:500;font-size:.85em}
+.attention-points{background:linear-gradient(135deg,#fff8e1 0%,#fff3cd 100%);border-radius:12px;padding:16px;margin:15px 0 0 0;border:1px solid rgba(255,193,7,.2);box-shadow:0 2px 8px rgba(255,152,0,.08),inset 0 1px 0 rgba(255,255,255,.5)}
+.attention-points h3{color:#856404;margin-bottom:12px;font-size:.9em;font-weight:600;display:flex;align-items:center;gap:6px}
+.attention-points ul{list-style:none;padding-left:0}
+.attention-points li{padding:10px 12px;margin-bottom:6px;font-size:.85em;color:#856404;background:rgba(255,255,255,.7);border-radius:8px;border-left:3px solid #ffc107;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.attention-points li:last-child{margin-bottom:0}
+.attention-points li:before{content:"• ";margin-right:8px}
+.category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;margin:15px 0}
+.category-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+.category-circle{width:65px;height:65px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2em;transition:all .3s cubic-bezier(.4,0,.2,1);box-shadow:0 2px 8px rgba(0,0,0,.12),0 4px 12px rgba(0,0,0,.08)}
+.category-item:active .category-circle{transform:scale(.92);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.category-item.selected .category-circle{box-shadow:0 0 0 3px white,0 0 0 6px #007AFF;transform:scale(1)}
+.category-circle.doenca{background:#34C759}
+.category-circle.insetos{background:#FF2D55}
+.category-circle.ervas{background:#FF9500}
+.category-circle.nutrientes{background:#8E8E93}
+.category-circle.agua{background:#30B0C7}
+.category-circle.outro{background:#5856D6}
+.category-name{font-size:.75em;color:#1d1d1f;text-align:center;font-weight:400}
+.nutrient-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.nutrient-badge{padding:12px 16px;border-radius:10px;text-align:center;cursor:pointer;font-size:.9em;font-weight:600;background:white;color:#1d1d1f;transition:all .3s cubic-bezier(.4,0,.2,1);border:1.5px solid rgba(0,0,0,.08);box-shadow:0 2px 6px rgba(0,0,0,.05);display:flex;flex-direction:column;gap:4px}
+.nutrient-badge:active{transform:scale(.96)}
+.nutrient-badge.selected{background:linear-gradient(135deg,#FF9500 0%,#FF8000 100%);color:white;border-color:transparent;box-shadow:0 4px 12px rgba(255,149,0,.35)}
+.nutrient-badge-icon{font-size:1.2em;font-weight:700}
+.nutrient-badge-name{font-size:.75em;font-weight:500}
+.problem-header{display:flex;align-items:center;gap:12px;margin-bottom:15px}
+.problem-icon-large{font-size:2em}
+.problem-title{font-size:1.1em;font-weight:600;color:#1d1d1f}
+.severity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.severity-option{padding:12px 8px;border-radius:10px;text-align:center;cursor:pointer;font-size:.85em;font-weight:600;background:white;color:#1d1d1f;transition:all .3s cubic-bezier(.4,0,.2,1);border:1.5px solid rgba(0,0,0,.08);box-shadow:0 2px 6px rgba(0,0,0,.05),0 1px 3px rgba(0,0,0,.03)}
+.severity-option:active{transform:scale(.96);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.severity-option.selected{transform:scale(.98);border-color:transparent}
+.severity-option.nenhum.selected{background:linear-gradient(135deg,#34C759 0%,#2DB04A 100%);color:white;box-shadow:0 4px 12px rgba(52,199,89,.35),0 2px 6px rgba(52,199,89,.25)}
+.severity-option.baixa.selected{background:linear-gradient(135deg,#FF9500 0%,#FF8000 100%);color:white;box-shadow:0 4px 12px rgba(255,149,0,.35),0 2px 6px rgba(255,149,0,.25)}
+.severity-option.media.selected{background:linear-gradient(135deg,#FF6B00 0%,#FF5500 100%);color:white;box-shadow:0 4px 12px rgba(255,107,0,.35),0 2px 6px rgba(255,107,0,.25)}
+.severity-option.alta.selected{background:linear-gradient(135deg,#FF3B30 0%,#E02020 100%);color:white;box-shadow:0 4px 12px rgba(255,59,48,.35),0 2px 6px rgba(255,59,48,.25)}
+.add-item{display:flex;align-items:center;gap:15px;padding:15px 0;cursor:pointer;color:#1d1d1f}
+.add-item-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:1.5em}
+.add-item-text{font-size:1em}
+.photos-list{display:flex;flex-direction:column;gap:15px;margin:15px 0 0 0}
+.photo-item{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08),0 4px 24px rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.05)}
+.photo-item-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(to bottom,#fafafa 0%,#f5f5f7 100%);border-bottom:1px solid rgba(0,0,0,.06)}
+.photo-item-type{display:flex;align-items:center;gap:8px;font-weight:600;color:#1d1d1f;font-size:.9em}
+.photo-item-remove{background:linear-gradient(135deg,#FF3B30 0%,#E02020 100%);color:white;border:none;border-radius:50%;width:28px;height:28px;font-size:1.1em;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(255,59,48,.3);transition:all .2s}
+.photo-item-remove:active{transform:scale(.9)}
+.photo-item-image{width:100%;height:200px;object-fit:cover}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:1000;align-items:flex-end;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:white;border-radius:12px 12px 0 0;width:100%;max-width:800px;max-height:70vh;overflow-y:auto}
+.modal-header{padding:20px;border-bottom:1px solid #e5e5e7}
+.modal-title{font-size:1.1em;font-weight:600;color:#1d1d1f;margin-bottom:5px}
+.modal-subtitle{font-size:.85em;color:#86868b}
+.modal-options{padding:10px 0}
+.modal-option{display:flex;align-items:center;gap:15px;padding:15px 20px;cursor:pointer;border-bottom:1px solid #e5e5e7}
+.modal-option:last-child{border-bottom:none}
+.modal-option:active{background:#f5f5f7}
+.modal-option-icon{font-size:1.8em}
+.modal-option-name{font-size:1em;color:#1d1d1f}
+.modal-cancel{padding:15px 20px;text-align:center;color:#007AFF;font-weight:600;cursor:pointer;border-top:1px solid #e5e5e7}
+.dap-info{background:#f5f5f7;border-radius:8px;padding:10px 15px;margin-top:10px;text-align:center}
+.dap-info strong{color:#007AFF;font-size:.95em}
+input[type="file"]{display:none}
+.photo-size-selector{margin-top:12px;display:flex;gap:10px;align-items:center}
+.photo-size-selector label{font-size:.95em;color:#1d1d1f}
+.photo-size-selector select{font-size:1em;border:none;background:transparent;border-bottom:1px solid #ccc;padding:4px 0}
+@media (max-width:600px){
+  .category-grid{grid-template-columns:repeat(5,1fr);gap:10px}
+  .category-circle{width:55px;height:55px;font-size:1.6em}
+  .category-name{font-size:.7em}
+  .severity-grid{grid-template-columns:repeat(4,1fr);gap:6px}
+  .severity-option{padding:10px 6px;font-size:.8em}
+}
+@media (min-width:768px){
+  .container{margin-top:20px;margin-bottom:20px;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+  .modal-content{border-radius:12px;max-height:80vh}
 }
-body {
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-background: linear-gradient(180deg, #f5f5f7 0%, #e5e5e7 100%);
-min-height: 100vh;
-padding: 20px;
-}
-.container {
-max-width: 900px;
-margin: 0 auto;
-}
-.card {
-background: rgba(255, 255, 255, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 12px;
-padding: 20px;
-margin-bottom: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-.section-title {
-font-size: 0.75em;
-color: #86868b;
-text-transform: uppercase;
-letter-spacing: 0.5px;
-font-weight: 500;
-margin-bottom: 16px;
-}
-.form-row {
-display: flex;
-align-items: center;
-padding: 8px 0;
-border-bottom: 1px solid #e5e5e7;
-}
-.form-row:last-child {
-border-bottom: none;
-}
-.form-row label {
-flex: 0 0 100px;
-color: #1d1d1f;
-font-size: 0.9em;
-}
-.form-row input[type="text"],
-.form-row input[type="number"] {
-flex: 1;
-border: none;
-background: transparent;
-text-align: right;
-font-size: 0.9em;
-color: #1d1d1f;
-padding: 4px 0;
-}
-.form-row input[type="text"]:focus,
-.form-row input[type="number"]:focus {
-outline: none;
-}
-.form-row input[type="number"] {
-max-width: 120px;
-}
-.farm-name-container {
-display: flex;
-align-items: center;
-gap: 12px;
-flex: 1;
-justify-content: flex-end;
-}
-.farm-name-container input[type="text"] {
-flex: 1;
-border: none;
-background: transparent;
-text-align: right;
-font-size: 0.9em;
-color: #1d1d1f;
-padding: 4px 8px 4px 0;
-}
-.logo-btn {
-width: 32px;
-height: 32px;
-background: transparent;
-border: none;
-border-radius: 6px;
-font-size: 16px;
-cursor: pointer;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 0;
-flex-shrink: 0;
-order: 3;
-}
-.logo-btn:hover {
-background: #f5f5f7;
-}
-.logo-btn.hidden {
-display: none !important;
-}
-.logo-preview {
-width: 32px;
-height: 32px;
-border-radius: 6px;
-object-fit: cover;
-display: none;
-flex-shrink: 0;
-order: 2;
-}
-.logo-preview.show {
-display: block;
-}
-.upload-container {
-display: flex;
-align-items: center;
-justify-content: flex-end;
-gap: 8px;
-}
-.upload-btn-small {
-width: 32px;
-height: 32px;
-background: transparent;
-border: 1px solid #d1d1d6;
-border-radius: 6px;
-font-size: 16px;
-cursor: pointer;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 0;
-}
-.upload-btn-small:hover {
-background: #f5f5f7;
-border-color: #86868b;
-}
-.upload-btn-small.hidden {
-display: none !important;
-}
-.upload-preview-small {
-width: 32px;
-height: 32px;
-border-radius: 6px;
-object-fit: cover;
-display: none;
-border: 1px solid #e5e5e7;
-}
-.upload-preview-small.show {
-display: block;
-}
-.comparison-item {
-background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 245, 247, 0.98) 100%);
-backdrop-filter: blur(10px);
-border-radius: 12px;
-padding: 20px;
-margin-bottom: 16px;
-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 8px 32px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-.comparison-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 16px;
-}
-.comparison-controls {
-display: flex;
-gap: 8px;
-align-items: center;
-}
-.photo-layout-select {
-padding: 4px 28px 4px 8px;
-border: 1px solid #d1d1d6;
-border-radius: 6px;
-background: white;
-font-size: 0.8em;
-color: #86868b;
-cursor: pointer;
-appearance: none;
-background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2386868b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 8px center;
-}
-.photo-layout-select:focus {
-outline: none;
-border-color: #007AFF;
-}
-.control-btn {
-width: 24px;
-height: 24px;
-border: none;
-background: transparent;
-cursor: pointer;
-font-size: 20px;
-line-height: 1;
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 4px;
-transition: all 0.2s;
-color: #86868b;
-padding: 0;
-}
-.control-btn:hover {
-background: rgba(0, 0, 0, 0.05);
-}
-.close-btn {
-color: #FF3B30;
-}
-.close-btn:hover {
-background: rgba(255, 59, 48, 0.1);
-}
-.collapse-btn {
-color: #86868b;
-}
-.collapse-icon {
-font-weight: 300;
-font-size: 24px;
-}
-.comparison-content {
-overflow: hidden;
-transition: all 0.3s ease;
-}
-.comparison-content.collapsed {
-max-height: 0;
-opacity: 0;
-}
-.comparison-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 16px;
-margin-bottom: 16px;
-}
-.comparison-grid.single-photo {
-grid-template-columns: 1fr;
-}
-.comparison-grid.single-photo .comparison-side:last-child {
-display: none;
-}
-.comparison-grid.single-photo .comparison-side {
-max-width: 100%;
-}
-.comparison-grid.single-photo .side-label {
-display: none;
-}
-.comparison-side {
-display: flex;
-flex-direction: column;
-gap: 12px;
-}
-.side-label {
-font-size: 0.75em;
-color: #86868b;
-text-transform: uppercase;
-letter-spacing: 0.5px;
-font-weight: 500;
-text-align: center;
-padding: 4px 8px;
-border-radius: 4px;
-cursor: text;
-transition: background 0.2s;
-}
-.side-label:hover {
-background: #f5f5f7;
-}
-.side-label:focus {
-outline: none;
-background: #e5e5e7;
-}
-.photo-upload {
-position: relative;
-width: 100%;
-min-height: 200px;
-background: #f5f5f7;
-border-radius: 12px;
-overflow: hidden;
-cursor: pointer;
-border: 2px dashed #d1d1d6;
-transition: all 0.2s;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.photo-upload:hover {
-border-color: #007AFF;
-background: #f0f9ff;
-}
-.photo-upload input {
-display: none;
-}
-.photo-placeholder {
-position: absolute;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-text-align: center;
-color: #86868b;
-display: block;
-}
-.photo-placeholder.hidden {
-display: none;
-}
-.photo-placeholder-icon {
-font-size: 2em;
-margin-bottom: 8px;
-}
-.photo-placeholder-text {
-font-size: 0.85em;
-}
-.photo-preview {
-width: 100%;
-height: auto;
-object-fit: contain;
-display: none;
-}
-.photo-preview.show {
-display: block;
-}
-.photo-upload.has-photo {
-border: none;
-cursor: default;
-}
-/* Demais estilos (footer, roi, etc.) iguais... */
-select {
-width: 100%;
-padding: 10px 12px;
-border: 1px solid #d1d1d6;
-border-radius: 8px;
-background: white;
-font-size: 0.9em;
-color: #1d1d1f;
-cursor: pointer;
-appearance: none;
-background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2386868b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 12px center;
-padding-right: 36px;
-}
-select:focus {
-outline: none;
-border-color: #007AFF;
-box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-}
-textarea {
-width: 100%;
-padding: 10px 12px;
-border: 1px solid #d1d1d6;
-border-radius: 8px;
-background: white;
-font-size: 0.9em;
-color: #1d1d1f;
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-resize: vertical;
-min-height: 60px;
-}
-textarea:focus {
-outline: none;
-border-color: #007AFF;
-box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-}
-textarea::placeholder {
-color: #86868b;
-}
-.add-menu-container {
-position: relative;
-display: inline-block;
-margin-top: 12px;
-}
-.add-comparison-btn {
-background: #e5e5e7;
-color: #86868b;
-border: none;
-padding: 10px 16px;
-border-radius: 8px;
-font-size: 0.9em;
-font-weight: 500;
-cursor: pointer;
-transition: all 0.2s;
-display: inline-flex;
-align-items: center;
-gap: 6px;
-}
-.add-comparison-btn:hover {
-background: #d1d1d6;
-color: #5e5e63;
-}
-.add-menu {
-display: none;
-position: absolute;
-top: 100%;
-left: 0;
-margin-top: 4px;
-background: white;
-border-radius: 8px;
-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-overflow: hidden;
-min-width: 140px;
-z-index: 100;
-}
-.add-menu.show {
-display: block;
-}
-.add-menu-item {
-display: block;
-width: 100%;
-padding: 10px 16px;
-border: none;
-background: white;
-text-align: left;
-font-size: 0.9em;
-color: #1d1d1f;
-cursor: pointer;
-transition: background 0.2s;
-}
-.add-menu-item:hover {
-background: #f5f5f7;
-}
-.add-menu-item:not(:last-child) {
-border-bottom: 1px solid #e5e5e7;
-}
-.footer {
-background: rgba(255, 255, 255, 0.95);
-backdrop-filter: blur(10px);
-border-radius: 12px;
-padding: 20px;
-margin-top: 24px;
-margin-bottom: 100px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
-}
-.consultant-input-row {
-display: flex;
-align-items: center;
-gap: 12px;
-}
-.consultant-input-row input[type="text"] {
-flex: 1;
-border: none;
-background: transparent;
-text-align: left;
-font-size: 0.95em;
-color: #1d1d1f;
-padding: 8px 0;
-border-bottom: 1px solid #e5e5e7;
-}
-.consultant-input-row input[type="text"]:focus {
-outline: none;
-border-bottom-color: #007AFF;
-}
-.consultant-input-row .upload-btn-small {
-order: 3;
-}
-.consultant-input-row .upload-preview-small {
-order: 2;
-}
-.footer-branding {
-margin-top: 16px;
-text-align: center;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-}
-.new-report-link {
-font-size: 0.75em;
-color: #007AFF;
-text-decoration: none;
-transition: color 0.2s;
-letter-spacing: 0.3px;
-}
-.new-report-link:hover {
-color: #0051D5;
-text-decoration: underline;
-}
-.branding-separator {
-font-size: 0.75em;
-color: #d1d1d6;
-}
-.branding-link {
-font-size: 0.75em;
-color: #c7c7cc;
-text-decoration: none;
-transition: color 0.2s;
-letter-spacing: 0.3px;
-}
-.branding-link:hover {
-color: #86868b;
-}
-.conclusion-section {
-margin-top: 24px;
-}
-.conclusion-section textarea {
-width: 100%;
-padding: 12px;
-border: 1px solid #d1d1d6;
-border-radius: 8px;
-background: white;
-font-size: 0.9em;
-color: #1d1d1f;
-resize: vertical;
-min-height: 80px;
-}
-.conclusion-section textarea:focus {
-outline: none;
-border-color: #007AFF;
-box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-}
-.roi-section {
-margin-top: 20px;
-}
-.roi-grid {
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 16px;
-align-items: end;
-}
-.roi-input-group {
-display: flex;
-flex-direction: column;
-gap: 6px;
-}
-.roi-input-group label {
-font-size: 0.8em;
-color: #86868b;
-}
-.roi-input-group input {
-padding: 8px 12px;
-border: 1px solid #d1d1d6;
-border-radius: 8px;
-background: white;
-font-size: 0.9em;
-color: #1d1d1f;
-}
-.roi-input-group input:focus {
-outline: none;
-border-color: #007AFF;
-box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-}
-.roi-result {
-display: flex;
-flex-direction: column;
-gap: 6px;
-}
-.roi-result label {
-font-size: 0.8em;
-color: #86868b;
-}
-.roi-value {
-padding: 8px 12px;
-border-radius: 8px;
-background: #f5f5f7;
-font-size: 1.1em;
-font-weight: 600;
-color: #1d1d1f;
-text-align: center;
-}
-.roi-value.positive {
-background: #e8f5e9;
-color: #2e7d32;
-}
-.roi-value.negative {
-background: #ffebee;
-color: #c62828;
-}
-.roi-return-display {
-margin-top: 16px;
-}
-.return-value {
-padding: 12px 16px;
-border-radius: 8px;
-background: #f5f5f7;
-font-size: 1.1em;
-font-weight: 600;
-color: #1d1d1f;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 8px;
-}
-.return-value.positive {
-background: #e8f5e9;
-color: #2e7d32;
-}
-.return-value.negative {
-background: #ffebee;
-color: #c62828;
-}
-.return-icon {
-font-size: 1.2em;
-}
-.return-text {
-font-variant-numeric: tabular-nums;
-}
-.remove-btn {
-background: linear-gradient(135deg, #FF3B30 0%, #D70015 100%);
-color: white;
-border: none;
-padding: 8px 16px;
-border-radius: 8px;
-font-size: 0.85em;
-font-weight: 500;
-cursor: pointer;
-box-shadow: 0 2px 8px rgba(255, 59, 48, 0.3);
-transition: all 0.2s;
-margin-top: 12px;
-}
-.remove-btn:hover {
-transform: translateY(-1px);
-box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
-}
-.floating-btn {
-position: fixed;
-bottom: 30px;
-right: 30px;
-width: 60px;
-height: 60px;
-border-radius: 30px;
-background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%);
-box-shadow: 0 4px 16px rgba(0, 122, 255, 0.4);
-border: none;
-color: white;
-font-size: 24px;
-cursor: pointer;
-transition: all 0.2s;
-}
-.floating-btn:hover {
-transform: scale(1.1);
-box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
-}
-@media print {
-@page {
-size: A4 portrait;
-margin: 1.5cm 2cm;
-}
-* {
--webkit-print-color-adjust: exact;
-print-color-adjust: exact;
-}
-body {
-background: white;
-padding: 0;
-margin: 0;
-}
-.container {
-max-width: 100%;
-padding: 0;
-margin: 0;
-}
-.floating-btn,
-.add-comparison-btn,
-.add-menu-container,
-.control-btn,
-.upload-btn-small,
-.photo-layout-select,
-.logo-btn {
-display: none !important;
-}
-.comparison-content.collapsed {
-max-height: none !important;
-opacity: 1 !important;
-}
-.card {
-margin-bottom: 8px;
-page-break-inside: avoid;
-break-inside: avoid;
-}
-.comparison-item {
-margin-bottom: 12px;
-page-break-inside: avoid !important;
-break-inside: avoid !important;
-}
-.comparison-content,
-.comparison-grid,
-.comparison-side,
-.conclusion-section,
-.footer,
-.photo-upload,
-.photo-preview,
-textarea {
-page-break-inside: avoid !important;
-break-inside: avoid !important;
-}
-.photo-upload,
-.photo-preview {
-max-height: 220px;
-object-fit: contain;
-}
-.footer-branding {
-display: flex !important;
-}
-.new-report-link,
-.branding-link {
-color: #007AFF !important;
-text-decoration: underline;
-}
-body {
-font-size: 11pt;
-}
-.section-title {
-font-size: 9pt;
-}
-p, h1, h2, h3, h4, h5, h6 {
-orphans: 3;
-widows: 3;
-}
-}
-@media (max-width: 768px) {
-.comparison-grid {
-grid-template-columns: 1fr;
-}
-.roi-grid {
-grid-template-columns: 1fr;
-}
+@media print{
+  .header-bar,.add-item,.photo-item-remove,.remove-tag{display:none}
 }
 </style>
 </head>
 <body>
+<div class="header-bar">
+  <div class="header-close" onclick="window.history.back()">✕</div>
+  <div class="header-title">Relatório de Visita</div>
+  <div class="header-save">
+    <div class="header-action" onclick="exportToPDF()">📄 PDF</div>
+    <div class="header-action" onclick="window.print()">🖨️ Imprimir</div>
+  </div>
+</div>
 <div class="container">
-<!-- Informações Gerais -->
-<div class="card">
-<div class="section-title">Dados do Produtor e Talhão</div>
-<div class="form-row">
-<label>Produtor</label>
-<input type="text" id="produtor" placeholder="Nome do produtor">
-</div>
-<div class="form-row">
-<label>Cidade</label>
-<input type="text" id="cidade" placeholder="Cidade - UF">
-</div>
-<div class="form-row">
-<label>Fazenda</label>
-<div class="farm-name-container">
-<input type="text" id="fazenda" placeholder="Nome da fazenda">
-<input type="file" id="logoUpload" accept="image/*" style="display: none;">
-<img id="logoPreview" class="logo-preview" alt="Logo">
-<button class="logo-btn" id="logoBtn" onclick="document.getElementById('logoUpload').click()">📷</button>
-</div>
-</div>
-<div class="form-row">
-<label>Talhão</label>
-<input type="text" id="talhao" placeholder="Nome do talhão">
-</div>
-<div class="form-row">
-<label>Tamanho (ha)</label>
-<input type="number" id="tamanhoHa" placeholder="0.00" step="0.01" max="9999999">
-</div>
-</div>
+  <div class="content">
+    <!-- Seção de Informações -->
+    <div class="section">
+      <div class="section-title">Informações da Visita</div>
+      <div class="form-row"><label>Produtor</label><input type="text" id="produtor" placeholder="Nome"></div>
+      <div class="form-row"><label>Propriedade</label><input type="text" id="propriedade" placeholder="Nome"></div>
+      <div class="form-row"><label>Data</label><input type="date" id="data"></div>
+      <div class="form-row"><label>Área (ha)</label><input type="number" id="area" placeholder="0.00" step="0.01"></div>
+      <div class="form-row"><label>Cultivar</label><input type="text" id="cultivar" placeholder="TMG 7062"></div>
+      <div class="form-row"><label>Plantio</label><input type="date" id="plantio" onchange="calculateDAP()"></div>
+      <div class="dap-info" id="dapInfo" style="display: none;"><strong>DAP: <span id="dapValue">0</span> dias</strong></div>
+    </div>
 
-<!-- Comparações -->
-<div id="comparisonsContainer"></div>
-
-<div class="add-menu-container">
-<button class="add-comparison-btn" onclick="toggleAddMenu()">
-+ Adicionar
-</button>
-<div class="add-menu" id="addMenu">
-<button class="add-menu-item" onclick="addComparison(); toggleAddMenu();">Avaliação</button>
-<button class="add-menu-item" onclick="addConclusao(); toggleAddMenu();">Conclusão</button>
-<button class="add-menu-item" onclick="addROI(); toggleAddMenu();">ROI</button>
-</div>
-</div>
-
-<!-- Footer -->
-<div class="footer">
-<div class="consultant-input-row">
-<input type="text" id="consultorNome" placeholder="Nome do consultor">
-<input type="file" id="consultorUpload" accept="image/*" style="display: none;">
-<img id="consultorPreview" class="upload-preview-small" alt="Consultor">
-<button class="upload-btn-small" id="consultorBtn" onclick="document.getElementById('consultorUpload').click()">📷</button>
-</div>
-<div class="footer-branding">
-<a href="https://afonsoraudinei.github.io/Relat-rio-/" target="_blank" class="new-report-link">Novo relatório</a>
-<span class="branding-separator">•</span>
-<a href="https://afonsoraudinei.github.io/" target="_blank" class="branding-link">SoloForte</a>
-</div>
-</div>
-</div>
-
-<button class="floating-btn" onclick="window.print()" title="Exportar PDF">🖨️</button>
-
-<script>
-// ============== UTILS ==============
-function readFileAsDataURL(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-function saveToStorage() {
-  const state = {
-    produtor: document.getElementById('produtor').value,
-    cidade: document.getElementById('cidade').value,
-    fazenda: document.getElementById('fazenda').value,
-    talhao: document.getElementById('talhao').value,
-    tamanhoHa: document.getElementById('tamanhoHa').value,
-    logo: document.getElementById('logoPreview').src.includes('data:image') ? document.getElementById('logoPreview').src : null,
-    consultorNome: document.getElementById('consultorNome').value,
-    consultorFoto: document.getElementById('consultorPreview').src.includes('data:image') ? document.getElementById('consultorPreview').src : null,
-    comparisons: [],
-    conclusao: document.getElementById('conclusao')?.value || null,
-    roi: {
-      investimento: document.getElementById('investimento')?.value || null,
-      retorno: document.getElementById('retorno')?.value || null
-    }
-  };
-
-  // Salva cada comparação
-  document.querySelectorAll('.comparison-item').forEach(el => {
-    const id = el.id.replace('comparison-', '');
-    const leftPhoto = document.getElementById(`leftPreview-${id}`)?.src;
-    const rightPhoto = document.getElementById(`rightPreview-${id}`)?.src;
-    state.comparisons.push({
-      id: parseInt(id),
-      layout: document.querySelector(`#grid-${id}`).classList.contains('single-photo') ? '1' : '2',
-      leftLabel: document.querySelector(`#grid-${id} .comparison-side:first-child .side-label`)?.textContent || 'Produto Padrão',
-      rightLabel: document.querySelector(`#grid-${id} .comparison-side:last-child .side-label`)?.textContent || 'Produto Testado',
-      leftPhoto: leftPhoto?.includes('data:image') ? leftPhoto : null,
-      rightPhoto: rightPhoto?.includes('data:image') ? rightPhoto : null,
-      leftEstadio: el.querySelector('.comparison-side:first-child select')?.value || '',
-      rightEstadio: el.querySelector('.comparison-side:last-child select')?.value || '',
-      leftNotes: el.querySelector('.comparison-side:first-child textarea')?.value || '',
-      rightNotes: el.querySelector('.comparison-side:last-child textarea')?.value || '',
-      photoHeight: el.querySelector('.photo-height-input')?.value || '200'
-    });
-  });
-
-  localStorage.setItem('sojaReport', JSON.stringify(state));
-}
-
-function restoreFromStorage() {
-  const saved = localStorage.getItem('sojaReport');
-  if (!saved) return;
-
-  const state = JSON.parse(saved);
-  document.getElementById('produtor').value = state.produtor || '';
-  document.getElementById('cidade').value = state.cidade || '';
-  document.getElementById('fazenda').value = state.fazenda || '';
-  document.getElementById('talhao').value = state.talhao || '';
-  document.getElementById('tamanhoHa').value = state.tamanhoHa || '';
-
-  if (state.logo) {
-    document.getElementById('logoPreview').src = state.logo;
-    document.getElementById('logoPreview').classList.add('show');
-    document.getElementById('logoBtn').classList.add('hidden');
-  }
-
-  document.getElementById('consultorNome').value = state.consultorNome || '';
-  if (state.consultorFoto) {
-    document.getElementById('consultorPreview').src = state.consultorFoto;
-    document.getElementById('consultorPreview').classList.add('show');
-    document.getElementById('consultorBtn').classList.add('hidden');
-  }
-
-  state.comparisons.forEach(cmp => {
-    addComparisonFromData(cmp);
-  });
-
-  if (state.conclusao !== null) addConclusao(state.conclusao);
-  if (state.roi.investimento || state.roi.retorno) addROI(state.roi.investimento, state.roi.retorno);
-}
-
-// ============== EVENTOS DE SALVAMENTO ==============
-['produtor', 'cidade', 'fazenda', 'talhao', 'tamanhoHa', 'consultorNome'].forEach(id => {
-  document.getElementById(id).addEventListener('input', saveToStorage);
-});
-
-document.getElementById('logoUpload').addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const dataUrl = await readFileAsDataURL(file);
-    document.getElementById('logoPreview').src = dataUrl;
-    document.getElementById('logoPreview').classList.add('show');
-    document.getElementById('logoBtn').classList.add('hidden');
-    saveToStorage();
-  }
-});
-
-document.getElementById('consultorUpload').addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const dataUrl = await readFileAsDataURL(file);
-    document.getElementById('consultorPreview').src = dataUrl;
-    document.getElementById('consultorPreview').classList.add('show');
-    document.getElementById('consultorBtn').classList.add('hidden');
-    saveToStorage();
-  }
-});
-
-// ============== COMPARISON ==============
-let comparisonCount = 0;
-
-function addComparisonFromData(data) {
-  comparisonCount = Math.max(comparisonCount, data.id);
-  addComparisonInternal(data);
-}
-
-function addComparison() {
-  comparisonCount++;
-  addComparisonInternal();
-}
-
-function addComparisonInternal(data = null) {
-  const container = document.getElementById('comparisonsContainer');
-  const photoHeight = data?.photoHeight || '200';
-
-  const comparisonHTML = `
-  <div class="comparison-item" id="comparison-${comparisonCount}">
-    <div class="comparison-header">
-      <div class="section-title">Avaliação ${comparisonCount}</div>
-      <div class="comparison-controls">
-        <select class="photo-layout-select" onchange="togglePhotoLayout(${comparisonCount}, this.value)">
-          <option value="2" ${data?.layout === '2' ? 'selected' : ''}>2 fotos</option>
-          <option value="1" ${data?.layout === '1' ? 'selected' : ''}>1 foto</option>
+    <!-- Estádio Fenológico -->
+    <div class="section">
+      <div class="section-title">Estádio Fenológico</div>
+      <div class="form-row">
+        <label>Estádio</label>
+        <select id="stageSelect" onchange="showStageInfo()">
+          <option value="">Selecione</option>
+          <option value="VE">VE - Emergência</option>
+          <option value="VC">VC - Cotilédones</option>
+          <option value="V1">V1 - 1ª Trifoliolada</option>
+          <option value="V2">V2 - 2ª Trifoliolada</option>
+          <option value="V3">V3 - 3ª Trifoliolada</option>
+          <option value="V4">V4 - 4ª Trifoliolada</option>
+          <option value="V5">V5 - 5ª Trifoliolada</option>
+          <option value="R1">R1 - Florescimento</option>
+          <option value="R2">R2 - Floração Plena</option>
+          <option value="R3">R3 - Vagens 1cm</option>
+          <option value="R4">R4 - Vagens 2cm</option>
+          <option value="R5.1">R5.1 - Início Enchimento</option>
+          <option value="R5.3">R5.3 - 50% Enchimento</option>
+          <option value="R5.5">R5.5 - 100% Enchimento</option>
+          <option value="R6">R6 - Grãos Formados</option>
+          <option value="R7">R7 - Início Maturação</option>
+          <option value="R8">R8 - Maturação Plena</option>
         </select>
-        <input type="number" class="photo-height-input" value="${photoHeight}" min="100" max="500" style="width:60px; padding:2px 4px; font-size:0.8em; border:1px solid #d1d1d6; border-radius:4px;" oninput="adjustPhotoHeight(${comparisonCount}, this.value)">
-        <button class="control-btn collapse-btn" onclick="toggleCollapse(${comparisonCount})" title="Expandir/Recolher">
-          <span class="collapse-icon">−</span>
-        </button>
-        <button class="control-btn close-btn" onclick="removeComparison(${comparisonCount})" title="Remover">×</button>
+      </div>
+      <div class="stage-display" id="stageDisplay">
+        <div class="stage-icon-large" id="stageIcon"></div>
+        <div class="stage-name-large" id="stageName"></div>
+        <div class="stage-description-large" id="stageDescription"></div>
+        <div class="dap-badge" id="stageDap"></div>
+      </div>
+      <div class="attention-points" id="attentionPoints" style="display: none;">
+        <h3>⚠️ Pontos de Atenção</h3>
+        <ul id="attentionList"></ul>
       </div>
     </div>
-    <div class="comparison-content" id="content-${comparisonCount}">
-      <div class="comparison-grid" id="grid-${comparisonCount}" ${data?.layout === '1' ? 'class="comparison-grid single-photo"' : ''}>
-        <div class="comparison-side">
-          <div class="side-label" contenteditable="true">${data?.leftLabel || 'Produto Padrão'}</div>
-          <div class="photo-upload" id="photoUploadLeft-${comparisonCount}" onclick="document.getElementById('leftPhoto-${comparisonCount}').click()" style="min-height:${photoHeight}px">
-            <input type="file" id="leftPhoto-${comparisonCount}" accept="image/*" onchange="handlePhotoUpload(event, 'leftPreview-${comparisonCount}', ${comparisonCount})">
-            <div class="photo-placeholder">
-              <div class="photo-placeholder-icon">📷</div>
-              <div class="photo-placeholder-text">Adicionar Foto</div>
-            </div>
-            <img id="leftPreview-${comparisonCount}" class="photo-preview" alt="Foto esquerda" style="max-height:${photoHeight}px">
-          </div>
-          <select>
-            <option value="">Estádio Fenológico</option>
-            <option value="VE" ${data?.leftEstadio === 'VE' ? 'selected' : ''}>VE - Emergência</option>
-            <option value="VC" ${data?.leftEstadio === 'VC' ? 'selected' : ''}>VC - Cotilédones</option>
-            <option value="V1" ${data?.leftEstadio === 'V1' ? 'selected' : ''}>V1 - Primeiro nó</option>
-            <option value="V2" ${data?.leftEstadio === 'V2' ? 'selected' : ''}>V2 - Segundo nó</option>
-            <option value="V3" ${data?.leftEstadio === 'V3' ? 'selected' : ''}>V3 - Terceiro nó</option>
-            <option value="V4" ${data?.leftEstadio === 'V4' ? 'selected' : ''}>V4 - Quarto nó</option>
-            <option value="V5" ${data?.leftEstadio === 'V5' ? 'selected' : ''}>V5 - Quinto nó</option>
-            <option value="V6" ${data?.leftEstadio === 'V6' ? 'selected' : ''}>V6 - Sexto nó</option>
-            <option value="R1" ${data?.leftEstadio === 'R1' ? 'selected' : ''}>R1 - Floração</option>
-            <option value="R2" ${data?.leftEstadio === 'R2' ? 'selected' : ''}>R2 - Floração Plena</option>
-            <option value="R3" ${data?.leftEstadio === 'R3' ? 'selected' : ''}>R3 - Início Formação Vagem</option>
-            <option value="R4" ${data?.leftEstadio === 'R4' ? 'selected' : ''}>R4 - Vagem Formada</option>
-            <option value="R5" ${data?.leftEstadio === 'R5' ? 'selected' : ''}>R5 - Início Enchimento Grão</option>
-            <option value="R6" ${data?.leftEstadio === 'R6' ? 'selected' : ''}>R6 - Grão Cheio</option>
-            <option value="R7" ${data?.leftEstadio === 'R7' ? 'selected' : ''}>R7 - Início Maturação</option>
-            <option value="R8" ${data?.leftEstadio === 'R8' ? 'selected' : ''}>R8 - Maturação Plena</option>
-          </select>
-          <textarea placeholder="Anotações da avaliação..." rows="3">${data?.leftNotes || ''}</textarea>
-        </div>
-        <div class="comparison-side">
-          <div class="side-label" contenteditable="true">${data?.rightLabel || 'Produto Testado'}</div>
-          <div class="photo-upload" id="photoUploadRight-${comparisonCount}" onclick="document.getElementById('rightPhoto-${comparisonCount}').click()" style="min-height:${photoHeight}px">
-            <input type="file" id="rightPhoto-${comparisonCount}" accept="image/*" onchange="handlePhotoUpload(event, 'rightPreview-${comparisonCount}', ${comparisonCount})">
-            <div class="photo-placeholder">
-              <div class="photo-placeholder-icon">📷</div>
-              <div class="photo-placeholder-text">Adicionar Foto</div>
-            </div>
-            <img id="rightPreview-${comparisonCount}" class="photo-preview" alt="Foto direita" style="max-height:${photoHeight}px">
-          </div>
-          <select>
-            <option value="">Estádio Fenológico</option>
-            <option value="VE" ${data?.rightEstadio === 'VE' ? 'selected' : ''}>VE - Emergência</option>
-            <option value="VC" ${data?.rightEstadio === 'VC' ? 'selected' : ''}>VC - Cotilédones</option>
-            <option value="V1" ${data?.rightEstadio === 'V1' ? 'selected' : ''}>V1 - Primeiro nó</option>
-            <option value="V2" ${data?.rightEstadio === 'V2' ? 'selected' : ''}>V2 - Segundo nó</option>
-            <option value="V3" ${data?.rightEstadio === 'V3' ? 'selected' : ''}>V3 - Terceiro nó</option>
-            <option value="V4" ${data?.rightEstadio === 'V4' ? 'selected' : ''}>V4 - Quarto nó</option>
-            <option value="V5" ${data?.rightEstadio === 'V5' ? 'selected' : ''}>V5 - Quinto nó</option>
-            <option value="V6" ${data?.rightEstadio === 'V6' ? 'selected' : ''}>V6 - Sexto nó</option>
-            <option value="R1" ${data?.rightEstadio === 'R1' ? 'selected' : ''}>R1 - Floração</option>
-            <option value="R2" ${data?.rightEstadio === 'R2' ? 'selected' : ''}>R2 - Floração Plena</option>
-            <option value="R3" ${data?.rightEstadio === 'R3' ? 'selected' : ''}>R3 - Início Formação Vagem</option>
-            <option value="R4" ${data?.rightEstadio === 'R4' ? 'selected' : ''}>R4 - Vagem Formada</option>
-            <option value="R5" ${data?.rightEstadio === 'R5' ? 'selected' : ''}>R5 - Início Enchimento Grão</option>
-            <option value="R6" ${data?.rightEstadio === 'R6' ? 'selected' : ''}>R6 - Grão Cheio</option>
-            <option value="R7" ${data?.rightEstadio === 'R7' ? 'selected' : ''}>R7 - Início Maturação</option>
-            <option value="R8" ${data?.rightEstadio === 'R8' ? 'selected' : ''}>R8 - Maturação Plena</option>
-          </select>
-          <textarea placeholder="Anotações da avaliação..." rows="3">${data?.rightNotes || ''}</textarea>
-        </div>
+
+    <!-- Categoria -->
+    <div class="section">
+      <div class="section-title">Categoria</div>
+      <div class="category-grid">
+        <div class="category-item" onclick="toggleCategory('doenca')"><div class="category-circle doenca">🦠</div><div class="category-name">Doença</div></div>
+        <div class="category-item" onclick="toggleCategory('insetos')"><div class="category-circle insetos">🐛</div><div class="category-name">Insetos</div></div>
+        <div class="category-item" onclick="toggleCategory('ervas')"><div class="category-circle ervas">🌾</div><div class="category-name">Ervas daninhas</div></div>
+        <div class="category-item" onclick="toggleCategory('nutrientes')"><div class="category-circle nutrientes">Ⓝ</div><div class="category-name">Nutrientes</div></div>
+        <div class="category-item" onclick="toggleCategory('agua')"><div class="category-circle agua">💧</div><div class="category-name">Água</div></div>
       </div>
+    </div>
+
+    <div id="problemsContainer"></div>
+
+    <!-- Fotos -->
+    <div class="section">
+      <div class="section-title">Fotos</div>
+      <div class="add-item" onclick="openPhotoCategories()">
+        <div class="add-item-icon">📷</div>
+        <div class="add-item-text">Adicionar Foto</div>
+      </div>
+      <div class="photo-size-selector">
+        <label>Tamanho no PDF:</label>
+        <select id="photoSizeSelect">
+          <option value="small">Pequena</option>
+          <option value="medium" selected>Média</option>
+          <option value="large">Grande</option>
+        </select>
+      </div>
+      <div class="photos-list" id="photosList"></div>
+    </div>
+
+    <!-- Observações, Recomendações, etc -->
+    <div class="section"><div class="section-title">Observações</div><div class="form-row"><textarea id="observacoes" placeholder="Observações gerais sobre a lavoura..."></textarea></div></div>
+    <div class="section"><div class="section-title">Recomendações</div><div class="form-row"><textarea id="recomendacoes" placeholder="Recomendações técnicas..."></textarea></div></div>
+    <div class="section"><div class="section-title">Responsável</div><div class="form-row"><input type="text" id="tecnico" placeholder="Nome do técnico"></div></div>
+    <div class="section">
+      <div class="section-title">Localização</div>
+      <div class="form-row"><label>Coordenadas</label><input type="text" id="coordenadas" placeholder="Pin" readonly></div>
+      <div style="padding:12px 0;color:#007AFF;cursor:pointer;font-size:.95em;" onclick="getCurrentLocation()">📍 Definir para minha localização atual</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Tipo de Ocorrência</div>
+      <div style="display:flex;gap:30px;padding:12px 0;">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:none;"><input type="radio" name="tipo" value="sazonal" id="sazonal" checked style="width:20px;height:20px;"><span>Sazonal</span></label>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:none;"><input type="radio" name="tipo" value="permanente" id="permanente" style="width:20px;height:20px;"><span>Permanente</span></label>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Amostras</div>
+      <div style="padding:12px 0;"><label style="display:flex;align-items:center;gap:12px;cursor:pointer;"><input type="checkbox" id="amostraSolo" style="width:22px;height:22px;cursor:pointer;"><span style="font-size:1em;color:#1d1d1f;">Amostra de solo</span></label></div>
     </div>
   </div>
-  `;
-  container.insertAdjacentHTML('beforeend', comparisonHTML);
-  if (data?.leftPhoto) {
-    document.getElementById(`leftPreview-${comparisonCount}`).src = data.leftPhoto;
-    document.getElementById(`leftPreview-${comparisonCount}`).classList.add('show');
-    document.getElementById(`photoUploadLeft-${comparisonCount}`).classList.add('has-photo');
-    document.getElementById(`photoUploadLeft-${comparisonCount}`).querySelector('.photo-placeholder').classList.add('hidden');
-  }
-  if (data?.rightPhoto) {
-    document.getElementById(`rightPreview-${comparisonCount}`).src = data.rightPhoto;
-    document.getElementById(`rightPreview-${comparisonCount}`).classList.add('show');
-    document.getElementById(`photoUploadRight-${comparisonCount}`).classList.add('has-photo');
-    document.getElementById(`photoUploadRight-${comparisonCount}`).querySelector('.photo-placeholder').classList.add('hidden');
-  }
-  saveToStorage();
-}
+</div>
 
-function handlePhotoUpload(event, previewId, cmpId) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      const preview = document.getElementById(previewId);
-      preview.src = e.target.result;
-      preview.classList.add('show');
-      const uploadArea = preview.closest('.photo-upload');
-      uploadArea.classList.add('has-photo');
-      const placeholder = uploadArea.querySelector('.photo-placeholder');
-      if (placeholder) placeholder.classList.add('hidden');
-      saveToStorage();
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function adjustPhotoHeight(cmpId, height) {
-  const h = Math.max(100, Math.min(500, parseInt(height) || 200));
-  const left = document.getElementById(`photoUploadLeft-${cmpId}`);
-  const right = document.getElementById(`photoUploadRight-${cmpId}`);
-  const leftImg = document.getElementById(`leftPreview-${cmpId}`);
-  const rightImg = document.getElementById(`rightPreview-${cmpId}`);
-  if (left) left.style.minHeight = h + 'px';
-  if (right) right.style.minHeight = h + 'px';
-  if (leftImg) leftImg.style.maxHeight = h + 'px';
-  if (rightImg) rightImg.style.maxHeight = h + 'px';
-  saveToStorage();
-}
-
-function removeComparison(id) {
-  const element = document.getElementById(`comparison-${id}`);
-  if (element) element.remove();
-  saveToStorage();
-}
-
-function toggleCollapse(id) {
-  const content = document.getElementById(`content-${id}`);
-  const btn = event.target.closest('.collapse-btn');
-  const icon = btn.querySelector('.collapse-icon');
-  if (content.classList.contains('collapsed')) {
-    content.classList.remove('collapsed');
-    icon.textContent = '−';
-  } else {
-    content.classList.add('collapsed');
-    icon.textContent = '+';
-  }
-}
-
-function togglePhotoLayout(id, layout) {
-  const grid = document.getElementById(`grid-${id}`);
-  if (layout === '1') {
-    grid.classList.add('single-photo');
-  } else {
-    grid.classList.remove('single-photo');
-  }
-  saveToStorage();
-}
-
-// ============== CONCLUSÃO ==============
-function addConclusao(text = '') {
-  if (document.getElementById('conclusao-section')) return;
-  const container = document.getElementById('comparisonsContainer');
-  container.insertAdjacentHTML('beforeend', `
-    <div class="card conclusion-section" id="conclusao-section">
-      <div class="comparison-header">
-        <div class="section-title">Conclusão</div>
-        <button class="control-btn close-btn" onclick="removeConclusao()" title="Remover">×</button>
-      </div>
-      <textarea id="conclusao" placeholder="Descreva a conclusão da avaliação..." rows="4">${text}</textarea>
+<!-- Modais -->
+<div class="modal" id="photoCategoryModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Categoria da Foto</div>
+      <div class="modal-subtitle">Selecione a categoria</div>
     </div>
-  `);
-  document.getElementById('conclusao').addEventListener('input', saveToStorage);
-}
-
-function removeConclusao() {
-  const el = document.getElementById('conclusao-section');
-  if (el) el.remove();
-  saveToStorage();
-}
-
-// ============== ROI ==============
-function addROI(invest = '', retorno = '') {
-  if (document.getElementById('roi-section')) return;
-  const container = document.getElementById('comparisonsContainer');
-  container.insertAdjacentHTML('beforeend', `
-    <div class="card conclusion-section" id="roi-section">
-      <div class="comparison-header">
-        <div class="section-title">ROI</div>
-        <button class="control-btn close-btn" onclick="removeROI()" title="Remover">×</button>
-      </div>
-      <div class="roi-grid">
-        <div class="roi-input-group">
-          <label>Investimento (R$/ha)</label>
-          <input type="number" id="investimento" placeholder="0.00" step="0.01" value="${invest}" oninput="calcularROI()">
-        </div>
-        <div class="roi-input-group">
-          <label>Retorno (R$/ha)</label>
-          <input type="number" id="retorno" placeholder="0.00" step="0.01" value="${retorno}" oninput="calcularROI()">
-        </div>
-        <div class="roi-result">
-          <label>ROI</label>
-          <div class="roi-value" id="roiValue">0%</div>
-        </div>
-      </div>
-      <div class="roi-return-display">
-        <div class="return-value" id="returnValue">
-          <span class="return-icon">💰</span>
-          <span class="return-text">R$ 0,00</span>
-        </div>
-      </div>
+    <div class="modal-options">
+      <div class="modal-option" onclick="selectPhotoCategory('doenca')"><div class="modal-option-icon">🦠</div><div class="modal-option-name">Doença</div></div>
+      <div class="modal-option" onclick="selectPhotoCategory('insetos')"><div class="modal-option-icon">🐛</div><div class="modal-option-name">Insetos</div></div>
+      <div class="modal-option" onclick="selectPhotoCategory('ervas')"><div class="modal-option-icon">🌾</div><div class="modal-option-name">Ervas Daninhas</div></div>
+      <div class="modal-option" onclick="selectPhotoCategory('nutrientes')"><div class="modal-option-icon">Ⓝ</div><div class="modal-option-name">Nutrientes</div></div>
+      <div class="modal-option" onclick="selectPhotoCategory('agua')"><div class="modal-option-icon">💧</div><div class="modal-option-name">Água</div></div>
+      <div class="modal-option" onclick="selectPhotoCategory('geral')"><div class="modal-option-icon">🌾</div><div class="modal-option-name">Geral da Lavoura</div></div>
     </div>
-  `);
-  document.getElementById('investimento').addEventListener('input', saveToStorage);
-  document.getElementById('retorno').addEventListener('input', saveToStorage);
-  calcularROI();
-}
+    <div class="modal-cancel" onclick="closeAllModals()">Cancelar</div>
+  </div>
+</div>
 
-function removeROI() {
-  const el = document.getElementById('roi-section');
-  if (el) el.remove();
-  saveToStorage();
-}
+<div class="modal" id="photoModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title">Classificar Foto</div>
+      <div class="modal-subtitle">Qual o tipo desta foto?</div>
+    </div>
+    <div class="modal-options">
+      <div class="modal-option" onclick="selectPhotoType('geral')"><div class="modal-option-icon">🌾</div><div class="modal-option-name">Foto Geral da Lavoura</div></div>
+      <div class="modal-option" onclick="selectPhotoType('detalhe')"><div class="modal-option-icon">🔍</div><div class="modal-option-name">Detalhe da Planta</div></div>
+      <div class="modal-option" onclick="selectPhotoType('problema')"><div class="modal-option-icon">⚠️</div><div class="modal-option-name">Problema Identificado</div></div>
+    </div>
+    <div class="modal-cancel" onclick="closeAllModals()">Cancelar</div>
+  </div>
+</div>
 
-function calcularROI() {
-  const investimento = parseFloat(document.getElementById('investimento')?.value) || 0;
-  const retorno = parseFloat(document.getElementById('retorno')?.value) || 0;
-  const roiValueEl = document.getElementById('roiValue');
-  const returnValueEl = document.getElementById('returnValue');
+<input type="file" id="photoInput" accept="image/*" onchange="handlePhoto()">
 
-  let area = parseFloat(document.getElementById('tamanhoHa').value) || 0;
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// --- DADOS ---
+const stages = {
+  "VE": { icon: "🌱", name: "Emergência", description: "Primeiras folhas emergem do solo", dapRange: "0-5" },
+  "VC": { icon: "🌿", name: "Cotilédones", description: "Folhas cotiledonares expandidas", dapRange: "5-8" },
+  "V1": { icon: "🌿", name: "1ª Trifoliolada", description: "Primeira folha trifoliolada totalmente expandida", dapRange: "8-12" },
+  "V2": { icon: "🌿", name: "2ª Trifoliolada", description: "Segunda folha trifoliolada expandida", dapRange: "12-16" },
+  "V3": { icon: "🌿", name: "3ª Trifoliolada", description: "Terceira folha trifoliolada expandida", dapRange: "16-20" },
+  "V4": { icon: "🌿", name: "4ª Trifoliolada", description: "Quarta folha trifoliolada expandida", dapRange: "20-24" },
+  "V5": { icon: "🌿", name: "5ª Trifoliolada", description: "Quinta folha trifoliolada expandida", dapRange: "24-28" },
+  "R1": { icon: "🌼", name: "Florescimento", description: "Primeiras flores abertas", dapRange: "28-35" },
+  "R2": { icon: "🌼", name: "Floração Plena", description: "Pico de floração", dapRange: "35-42" },
+  "R3": { icon: "🌱", name: "Vagens 1cm", description: "Vagens com 5mm a 1cm", dapRange: "42-50" },
+  "R4": { icon: "🌱", name: "Vagens 2cm", description: "Vagens com 2cm", dapRange: "50-58" },
+  "R5.1": { icon: "🌱", name: "Início Enchimento", description: "Grãos começam a se formar", dapRange: "58-65" },
+  "R5.3": { icon: "🌱", name: "50% Enchimento", description: "Grãos atingem metade do tamanho", dapRange: "65-72" },
+  "R5.5": { icon: "🌱", name: "100% Enchimento", description: "Grãos atingem tamanho máximo", dapRange: "72-78" },
+  "R6": { icon: "🌱", name: "Grãos Formados", description: "Grãos totalmente formados", dapRange: "78-85" },
+  "R7": { icon: "🍂", name: "Início Maturação", description: "Primeiras folhas amarelam", dapRange: "85-95" },
+  "R8": { icon: "🍂", name: "Maturação Plena", description: "Plantas senescentes, colheita possível", dapRange: "95+" }
+};
 
-  const ganhoPorHa = retorno - investimento;
-  const ganhoTotal = ganhoPorHa * area;
+const categories = {
+  "doenca": { icon: "🦠", name: "Doença", nutrients: null },
+  "insetos": { icon: "🐛", name: "Insetos/Ácaros", nutrients: null },
+  "ervas": { icon: "🌾", name: "Ervas Daninhas", nutrients: null },
+  "nutrientes": {
+    icon: "Ⓝ",
+    name: "Deficiência Nutricional",
+    nutrients: ["N", "P", "K", "Ca", "Mg", "S", "Fe", "Mn", "Zn", "Cu", "B", "Mo"]
+  },
+  "agua": { icon: "💧", name: "Problema Hídrico", nutrients: null }
+};
 
-  const returnText = returnValueEl.querySelector('.return-text');
-  if (area > 0) {
-    returnText.textContent = 'R$ ' + ganhoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  } else {
-    returnText.textContent = 'R$ ' + ganhoPorHa.toFixed(2).replace('.', ',') + '/ha';
+const photoTypes = {
+  'geral': { icon: '🌾', name: 'Foto Geral' },
+  'detalhe': { icon: '🔍', name: 'Detalhe' },
+  'problema': { icon: '⚠️', name: 'Problema' }
+};
+
+// --- STATE ---
+let selectedCategories = new Set();
+let severityData = {};
+let photos = [];
+let pendingPhoto = null;
+let pendingPhotoCategory = null;
+let selectedNutrients = new Set();
+
+// --- UTILS ---
+const saveToStorage = () => {
+  const data = {
+    produtor: document.getElementById('produtor').value,
+    propriedade: document.getElementById('propriedade').value,
+    data: document.getElementById('data').value,
+    area: document.getElementById('area').value,
+    cultivar: document.getElementById('cultivar').value,
+    plantio: document.getElementById('plantio').value,
+    dapValue: document.getElementById('dapValue').textContent,
+    stageSelect: document.getElementById('stageSelect').value,
+    observacoes: document.getElementById('observacoes').value,
+    recomendacoes: document.getElementById('recomendacoes').value,
+    tecnico: document.getElementById('tecnico').value,
+    coordenadas: document.getElementById('coordenadas').value,
+    tipo: document.querySelector('input[name="tipo"]:checked').value,
+    amostraSolo: document.getElementById('amostraSolo').checked,
+    selectedCategories: Array.from(selectedCategories),
+    severityData,
+    selectedNutrients: Array.from(selectedNutrients),
+    photos,
+    photoSize: document.getElementById('photoSizeSelect').value
+  };
+  localStorage.setItem('relatorio-visita', JSON.stringify(data));
+};
+
+const loadFromStorage = () => {
+  const saved = localStorage.getItem('relatorio-visita');
+  if (!saved) return;
+
+  const data = JSON.parse(saved);
+  document.getElementById('produtor').value = data.produtor || '';
+  document.getElementById('propriedade').value = data.propriedade || '';
+  document.getElementById('data').value = data.data || '';
+  document.getElementById('area').value = data.area || '';
+  document.getElementById('cultivar').value = data.cultivar || '';
+  document.getElementById('plantio').value = data.plantio || '';
+
+  if (data.plantio && data.data) {
+    const p = new Date(data.plantio);
+    const v = new Date(data.data);
+    if (!isNaN(p.getTime()) && !isNaN(v.getTime())) {
+      const dap = Math.floor((v - p) / (1000 * 60 * 60 * 24));
+      document.getElementById('dapValue').textContent = dap;
+      document.getElementById('dapInfo').style.display = 'block';
+    }
   }
 
-  const ganhoParaComparar = area > 0 ? ganhoTotal : ganhoPorHa;
-  returnValueEl.className = ganhoParaComparar > 0 ? 'return-value positive' : ganhoParaComparar < 0 ? 'return-value negative' : 'return-value';
+  document.getElementById('observacoes').value = data.observacoes || '';
+  document.getElementById('recomendacoes').value = data.recomendacoes || '';
+  document.getElementById('tecnico').value = data.tecnico || '';
+  document.getElementById('coordenadas').value = data.coordenadas || '';
+  document.getElementById('sazonal').checked = data.tipo === 'sazonal';
+  document.getElementById('permanente').checked = data.tipo === 'permanente';
+  document.getElementById('amostraSolo').checked = data.amostraSolo || false;
 
-  if (investimento === 0) {
-    roiValueEl.textContent = '0%';
-    roiValueEl.className = 'roi-value';
-    return;
-  }
+  selectedCategories = new Set(data.selectedCategories || []);
+  severityData = data.severityData || {};
+  selectedNutrients = new Set(data.selectedNutrients || []);
+  photos = data.photos || [];
+  document.getElementById('photoSizeSelect').value = data.photoSize || 'medium';
 
-  const roi = ((retorno - investimento) / investimento) * 100;
-  roiValueEl.textContent = roi.toFixed(1) + '%';
-  roiValueEl.className = roi > 0 ? 'roi-value positive' : roi < 0 ? 'roi-value negative' : 'roi-value';
-}
+  document.getElementById('stageSelect').value = data.stageSelect || '';
+  if (data.stageSelect) showStageInfo();
 
-// ============== MENU ==============
-function toggleAddMenu() {
-  document.getElementById('addMenu').classList.toggle('show');
-}
-
-document.addEventListener('click', function(event) {
-  const container = document.querySelector('.add-menu-container');
-  const menu = document.getElementById('addMenu');
-  if (!container.contains(event.target)) menu.classList.remove('show');
-});
-
-// ============== INIT ==============
-window.addEventListener('load', () => {
-  restoreFromStorage();
-  // Garante que o evento de input salve automaticamente
-  document.querySelectorAll('textarea, input[type="number"], input[type="text"], select').forEach(el => {
-    el.addEventListener('input', saveToStorage);
+  // Atualiza UI das categorias
+  document.querySelectorAll('.category-item').forEach(el => {
+    const id = el.getAttribute('data-id');
+    if (id && selectedCategories.has(id)) {
+      el.classList.add('selected');
+    }
   });
+
+  renderProblems();
+  renderPhotos();
+};
+
+// Atribui data-id para seleção
+document.querySelectorAll('.category-item').forEach((el, i) => {
+  const ids = ['doenca','insetos','ervas','nutrientes','agua'];
+  el.setAttribute('data-id', ids[i]);
 });
+
+// --- EVENT LISTENERS ---
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    document.getElementById('data').valueAsDate = new Date();
+    // Tenta obter localização automaticamente
+    getCurrentLocation();
+  } catch (error) {
+    console.error('Erro ao inicializar:', error);
+  }
+
+  // Carregar dados salvos
+  loadFromStorage();
+
+  // Auto-salvar em qualquer mudança
+  document.querySelectorAll('input, textarea, select, [type="radio"], [type="checkbox"]').forEach(el => {
+    el.addEventListener('input', saveToStorage);
+    el.addEventListener('change', saveToStorage);
+  });
+
+  // Salvar ao fechar
+  window.addEventListener('beforeunload', saveToStorage);
+});
+
+// --- FUNÇÕES PRINCIPAIS ---
+function showStageInfo() {
+  const stageKey = document.getElementById('stageSelect').value;
+  const stageInfo = stages[stageKey];
+  const stageDisplay = document.getElementById('stageDisplay');
+  if (stageInfo) {
+    document.getElementById('stageIcon').textContent = stageInfo.icon;
+    document.getElementById('stageName').textContent = stageInfo.name;
+    document.getElementById('stageDescription').textContent = stageInfo.description;
+    document.getElementById('stageDap').textContent = `DAP: ${stageInfo.dapRange}`;
+    stageDisplay.classList.add('active');
+  } else {
+    stageDisplay.classList.remove('active');
+  }
+}
+
+function toggleCategory(id) {
+  const el = document.querySelector(`.category-item[data-id="${id}"]`);
+  if (selectedCategories.has(id)) {
+    selectedCategories.delete(id);
+    el.classList.remove('selected');
+  } else {
+    selectedCategories.add(id);
+    el.classList.add('selected');
+  }
+  renderProblems();
+  saveToStorage();
+}
+
+function renderProblems() {
+  const container = document.getElementById('problemsContainer');
+  container.innerHTML = '';
+
+  selectedCategories.forEach(catId => {
+    const cat = categories[catId];
+    if (!cat) return;
+
+    const problemDiv = document.createElement('div');
+    problemDiv.className = 'section';
+    problemDiv.innerHTML = `
+      <div class="problem-header">
+        <div class="problem-icon-large">${cat.icon}</div>
+        <div class="problem-title">${cat.name}</div>
+      </div>
+    `;
+
+    if (cat.nutrients) {
+      const nutrientGrid = document.createElement('div');
+      nutrientGrid.className = 'nutrient-grid';
+      cat.nutrients.forEach(nut => {
+        const nutrientDiv = document.createElement('div');
+        nutrientDiv.className = 'nutrient-badge' + (selectedNutrients.has(nut) ? ' selected' : '');
+        nutrientDiv.innerHTML = `<div class="nutrient-badge-icon">${nut}</div><div class="nutrient-badge-name">${nut}</div>`;
+        nutrientDiv.onclick = () => toggleNutrient(nut, nutrientDiv);
+        nutrientGrid.appendChild(nutrientDiv);
+      });
+      problemDiv.appendChild(nutrientGrid);
+    }
+
+    const severityDiv = document.createElement('div');
+    severityDiv.innerHTML = `<div class="section-title">Severidade</div>`;
+    const severityGrid = document.createElement('div');
+    severityGrid.className = 'severity-grid';
+    const levels = [
+      { id: 'nenhum', name: 'Nenhum' },
+      { id: 'baixa', name: 'Baixa' },
+      { id: 'media', name: 'Média' },
+      { id: 'alta', name: 'Alta' }
+    ];
+    levels.forEach(level => {
+      const btn = document.createElement('div');
+      btn.className = 'severity-option ' + level.id + (severityData[catId] === level.id ? ' selected' : '');
+      btn.textContent = level.name;
+      btn.onclick = () => selectSeverity(catId, level.id, level.name, btn);
+      severityGrid.appendChild(btn);
+    });
+    severityDiv.appendChild(severityGrid);
+    problemDiv.appendChild(severityDiv);
+
+    container.appendChild(problemDiv);
+  });
+}
+
+function toggleNutrient(nutrientId, el) {
+  if (selectedNutrients.has(nutrientId)) {
+    selectedNutrients.delete(nutrientId);
+    el.classList.remove('selected');
+  } else {
+    selectedNutrients.add(nutrientId);
+    el.classList.add('selected');
+  }
+  saveToStorage();
+}
+
+function selectSeverity(cat, levelId, value, el) {
+  // Remover seleção anterior
+  document.querySelectorAll(`.severity-option`).forEach(btn => {
+    if (btn.closest('.section') === el.closest('.section')) {
+      btn.classList.remove('selected');
+    }
+  });
+  el.classList.add('selected');
+  severityData[cat] = levelId;
+  saveToStorage();
+}
+
+function openPhotoCategories() {
+  document.getElementById('photoCategoryModal').classList.add('active');
+}
+
+function selectPhotoCategory(category) {
+  pendingPhotoCategory = category;
+  document.getElementById('photoCategoryModal').classList.remove('active');
+  document.getElementById('photoInput').click();
+}
+
+function handlePhoto() {
+  const fileInput = document.getElementById('photoInput');
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    pendingPhoto = e.target.result;
+    document.getElementById('photoModal').classList.add('active');
+  };
+  reader.readAsDataURL(file);
+  fileInput.value = '';
+}
+
+function selectPhotoType(type) {
+  const typeData = photoTypes[type];
+  photos.push({
+    id: Date.now(),
+    data: pendingPhoto,
+    category: pendingPhotoCategory,
+    categoryName: categories[pendingPhotoCategory]?.name || 'Geral',
+    type: type,
+    typeName: typeData.name
+  });
+  renderPhotos();
+  closeAllModals();
+  pendingPhoto = null;
+  pendingPhotoCategory = null;
+  saveToStorage();
+}
+
+function closeAllModals() {
+  document.getElementById('photoCategoryModal').classList.remove('active');
+  document.getElementById('photoModal').classList.remove('active');
+  pendingPhoto = null;
+  pendingPhotoCategory = null;
+}
+
+function renderPhotos() {
+  const list = document.getElementById('photosList');
+  list.innerHTML = '';
+  photos.forEach(photo => {
+    const item = document.createElement('div');
+    item.className = 'photo-item';
+    item.innerHTML = `
+      <div class="photo-item-header">
+        <div class="photo-item-type">
+          ${photo.categoryName} - ${photo.typeName}
+        </div>
+        <button class="photo-item-remove" onclick="removePhoto(${photo.id})">×</button>
+      </div>
+      <img src="${photo.data}" class="photo-item-image" />
+    `;
+    list.appendChild(item);
+  });
+}
+
+function removePhoto(id) {
+  photos = photos.filter(p => p.id !== id);
+  renderPhotos();
+  saveToStorage();
+}
+
+function calculateDAP() {
+  const plantio = document.getElementById('plantio').value;
+  const visita = document.getElementById('data').value;
+  if (plantio && visita) {
+    const p = new Date(plantio);
+    const v = new Date(visita);
+    if (!isNaN(p.getTime()) && !isNaN(v.getTime())) {
+      const dap = Math.floor((v - p) / (1000 * 60 * 60 * 24));
+      document.getElementById('dapValue').textContent = dap;
+      document.getElementById('dapInfo').style.display = 'block';
+      saveToStorage();
+    }
+  }
+}
+
+function getCurrentLocation() {
+  if (!navigator.geolocation) return;
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const lat = position.coords.latitude.toFixed(6);
+      const lng = position.coords.longitude.toFixed(6);
+      document.getElementById('coordenadas').value = `${lat}, ${lng}`;
+      saveToStorage();
+    },
+    function(error) {
+      console.warn('Geolocalização não obtida:', error.message);
+    }
+  );
+}
+
+// --- EXPORTAÇÃO PDF ---
+async function exportToPDF() {
+  const loadingDiv = document.createElement('div');
+  loadingDiv.style.position = 'fixed';
+  loadingDiv.style.top = '0';
+  loadingDiv.style.left = '0';
+  loadingDiv.style.right = '0';
+  loadingDiv.style.bottom = '0';
+  loadingDiv.style.backgroundColor = 'rgba(0,0,0,0.7)';
+  loadingDiv.style.display = 'flex';
+  loadingDiv.style.justifyContent = 'center';
+  loadingDiv.style.alignItems = 'center';
+  loadingDiv.style.color = 'white';
+  loadingDiv.style.fontSize = '1.2em';
+  loadingDiv.style.zIndex = '10000';
+  loadingDiv.textContent = 'Gerando PDF...';
+  document.body.appendChild(loadingDiv);
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const margin = 15;
+    const contentWidth = pageWidth - (2 * margin);
+    let yPosition = 35;
+
+    const fontFamily = 'helvetica';
+    const addText = (text, x, y, size = 12, style = 'normal') => {
+      pdf.setFont(fontFamily, style);
+      pdf.setFontSize(size);
+      pdf.text(text, x, y);
+    };
+
+    const addSection = (title, content, isMultiline = false) => {
+      if (yPosition > 270) { pdf.addPage(); yPosition = 20; }
+      addText(title, margin, yPosition, 10, 'bold');
+      yPosition += 5;
+      if (isMultiline) {
+        const lines = pdf.splitTextToSize(content, contentWidth);
+        lines.forEach(line => {
+          if (yPosition > 270) { pdf.addPage(); yPosition = 20; }
+          addText(line, margin, yPosition, 10);
+          yPosition += 5;
+        });
+        yPosition += 5;
+      } else {
+        addText(content || '—', margin + 35, yPosition, 10);
+        yPosition += 8;
+      }
+    };
+
+    // Cabeçalho
+    pdf.setFont(fontFamily, 'bold');
+    pdf.setFontSize(16);
+    pdf.text('RELATÓRIO DE VISITA AGRÍCOLA', pageWidth / 2, 20, null, null, 'center');
+
+    // Informações da Visita
+    addText('Informações da Visita', margin, yPosition, 11, 'bold');
+    yPosition += 8;
+    addSection('Produtor:', document.getElementById('produtor').value);
+    addSection('Propriedade:', document.getElementById('propriedade').value);
+    addSection('Data da Visita:', document.getElementById('data').value);
+    addSection('Área (ha):', document.getElementById('area').value);
+    addSection('Cultivar:', document.getElementById('cultivar').value);
+    addSection('Data de Plantio:', document.getElementById('plantio').value);
+    addSection('DAP:', document.getElementById('dapValue').textContent + ' dias');
+
+    // Estádio Fenológico
+    const stageKey = document.getElementById('stageSelect').value;
+    if (stageKey) {
+      const stage = stages[stageKey];
+      addText('Estádio Fenológico', margin, yPosition, 11, 'bold');
+      yPosition += 8;
+      addSection('Estádio:', `${stage.name} (${stage.dapRange} DAP)`);
+      if (stage.description) addSection('Descrição:', stage.description);
+    }
+
+    // Categorias Selecionadas
+    if (selectedCategories.size > 0) {
+      addText('Problemas Identificados', margin, yPosition, 11, 'bold');
+      yPosition += 8;
+      selectedCategories.forEach(catId => {
+        const cat = categories[catId];
+        addText(`${cat.icon} ${cat.name}`, margin, yPosition, 10, 'bold');
+        yPosition += 7;
+        if (cat.nutrients) {
+          const sel = Array.from(selectedNutrients).join(', ');
+          if (sel) addSection('Nutrientes:', sel);
+        }
+        const severity = severityData[catId] || 'nenhum';
+        const severityLabels = { nenhum: 'Nenhum', baixa: 'Baixa', media: 'Média', alta: 'Alta' };
+        addSection('Severidade:', severityLabels[severity]);
+        yPosition += 3;
+      });
+    }
+
+    // Fotos
+    if (photos.length > 0) {
+      const photoSize = document.getElementById('photoSizeSelect').value;
+      let maxHeight;
+      switch (photoSize) {
+        case 'small': maxHeight = 40; break;
+        case 'large': maxHeight = 80; break;
+        default: maxHeight = 60;
+      }
+
+      addText('Fotos', margin, yPosition, 11, 'bold');
+      yPosition += 8;
+      for (let i = 0; i < photos.length; i++) {
+        const photo = photos[i];
+        const photoType = photoTypes[photo.type];
+        if (yPosition + maxHeight + 20 > 277) {
+          pdf.addPage();
+          yPosition = margin;
+        }
+        addText(`${photo.categoryName} - ${photoType.name}`, margin, yPosition, 9, 'bold');
+        yPosition += 5;
+        try {
+          pdf.addImage(photo.data, 'JPEG', margin, yPosition, contentWidth, maxHeight, undefined, 'FAST');
+          yPosition += maxHeight + 8;
+        } catch (err) {
+          addText('[Erro ao adicionar imagem]', margin, yPosition + 5, 9);
+          yPosition += 15;
+        }
+      }
+    }
+
+    // Observações, Recomendações, etc.
+    const obs = document.getElementById('observacoes').value;
+    const rec = document.getElementById('recomendacoes').value;
+    const tec = document.getElementById('tecnico').value;
+    const coord = document.getElementById('coordenadas').value;
+
+    if (obs) { addText('Observações', margin, yPosition, 11, 'bold'); yPosition += 8; addSection('', obs, true); }
+    if (rec) { addText('Recomendações', margin, yPosition, 11, 'bold'); yPosition += 8; addSection('', rec, true); }
+    if (tec) { addText('Responsável Técnico', margin, yPosition, 11, 'bold'); yPosition += 8; addSection('', tec); }
+    if (coord) { addText('Localização', margin, yPosition, 11, 'bold'); yPosition += 8; addSection('Coordenadas:', coord); }
+
+    // Rodapé
+    const pageCount = pdf.internal.getNumberOfPages();
+    for (let i = 1; i <= pageCount; i++) {
+      pdf.setPage(i);
+      pdf.setFontSize(9);
+      pdf.setTextColor(150);
+      pdf.text(`Página ${i} de ${pageCount}`, pageWidth / 2, 287, null, null, 'center');
+    }
+
+    pdf.save(`relatorio_visita_${new Date().toISOString().slice(0,10)}.pdf`);
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao gerar PDF: ' + err.message);
+  } finally {
+    document.body.removeChild(loadingDiv);
+  }
+}
 </script>
 </body>
 </html>
