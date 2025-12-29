@@ -1,3 +1,18 @@
+Claro! Abaixo está o **código HTML completo atualizado** com as seguintes melhorias:
+
+✅ Substituição dos ícones de texto (`🌱`, `🌿`, etc.) por **imagens PNG** nos estádios fenológicos.  
+✅ Suporte a imagens carregadas via URL (ex: GitHub Raw).  
+✅ Renderização correta das imagens na interface **e no PDF**.  
+✅ Uso de `<img>` com estilo apropriado (60×60 px, `object-fit: contain`).  
+✅ Mantém todos os recursos originais (salvamento, fotos, categorias, etc.).
+
+> 🔔 **Você precisará substituir as URLs das imagens** pelos links reais do seu repositório no GitHub (ex: `https://raw.githubusercontent.com/seu-usuario/seu-repo/main/VE.png`).
+
+---
+
+### ✅ Código HTML Atualizado (com suporte a imagens nos estádios):
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -28,7 +43,8 @@ textarea{text-align:left;min-height:80px;resize:vertical;padding:12px 0}
 .stage-display{display:none;background:linear-gradient(135deg,rgba(255,255,255,.95) 0%,rgba(245,245,247,.98) 100%);backdrop-filter:blur(10px);border-radius:16px;padding:24px;text-align:center;margin:15px 0;border:1px solid rgba(0,0,0,.05);box-shadow:0 4px 16px rgba(0,0,0,.08),0 8px 32px rgba(0,0,0,.04),inset 0 1px 0 rgba(255,255,255,.8)}
 .stage-display.active{display:block;animation:slideUp .4s cubic-bezier(.4,0,.2,1)}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.stage-icon-large{font-size:3em;margin-bottom:10px}
+.stage-icon-large{font-size:3em;margin-bottom:10px;display:flex;justify-content:center;}
+.stage-icon-large img{width:60px;height:60px;object-fit:contain;}
 .stage-name-large{font-size:1.2em;font-weight:600;color:#1d1d1f;margin-bottom:5px}
 .stage-description-large{font-size:.9em;color:#86868b;margin-bottom:10px}
 .dap-badge{display:inline-block;background:#007AFF;color:white;padding:6px 14px;border-radius:16px;font-weight:500;font-size:.85em}
@@ -267,25 +283,25 @@ input[type="file"]{display:none}
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// --- DADOS ---
+// --- DADOS (com URLs de imagens PNG) ---
 const stages = {
-  "VE": { icon: "🌱", name: "Emergência", description: "Primeiras folhas emergem do solo", dapRange: "0-5" },
-  "VC": { icon: "🌿", name: "Cotilédones", description: "Folhas cotiledonares expandidas", dapRange: "5-8" },
-  "V1": { icon: "🌿", name: "1ª Trifoliolada", description: "Primeira folha trifoliolada totalmente expandida", dapRange: "8-12" },
-  "V2": { icon: "🌿", name: "2ª Trifoliolada", description: "Segunda folha trifoliolada expandida", dapRange: "12-16" },
-  "V3": { icon: "🌿", name: "3ª Trifoliolada", description: "Terceira folha trifoliolada expandida", dapRange: "16-20" },
-  "V4": { icon: "🌿", name: "4ª Trifoliolada", description: "Quarta folha trifoliolada expandida", dapRange: "20-24" },
-  "V5": { icon: "🌿", name: "5ª Trifoliolada", description: "Quinta folha trifoliolada expandida", dapRange: "24-28" },
-  "R1": { icon: "🌼", name: "Florescimento", description: "Primeiras flores abertas", dapRange: "28-35" },
-  "R2": { icon: "🌼", name: "Floração Plena", description: "Pico de floração", dapRange: "35-42" },
-  "R3": { icon: "🌱", name: "Vagens 1cm", description: "Vagens com 5mm a 1cm", dapRange: "42-50" },
-  "R4": { icon: "🌱", name: "Vagens 2cm", description: "Vagens com 2cm", dapRange: "50-58" },
-  "R5.1": { icon: "🌱", name: "Início Enchimento", description: "Grãos começam a se formar", dapRange: "58-65" },
-  "R5.3": { icon: "🌱", name: "50% Enchimento", description: "Grãos atingem metade do tamanho", dapRange: "65-72" },
-  "R5.5": { icon: "🌱", name: "100% Enchimento", description: "Grãos atingem tamanho máximo", dapRange: "72-78" },
-  "R6": { icon: "🌱", name: "Grãos Formados", description: "Grãos totalmente formados", dapRange: "78-85" },
-  "R7": { icon: "🍂", name: "Início Maturação", description: "Primeiras folhas amarelam", dapRange: "85-95" },
-  "R8": { icon: "🍂", name: "Maturação Plena", description: "Plantas senescentes, colheita possível", dapRange: "95+" }
+  "VE": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/VE.png", name: "Emergência", description: "Primeiras folhas emergem do solo", dapRange: "0-5" },
+  "VC": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/VC.png", name: "Cotilédones", description: "Folhas cotiledonares expandidas", dapRange: "5-8" },
+  "V1": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/V1.png", name: "1ª Trifoliolada", description: "Primeira folha trifoliolada totalmente expandida", dapRange: "8-12" },
+  "V2": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/V2.png", name: "2ª Trifoliolada", description: "Segunda folha trifoliolada expandida", dapRange: "12-16" },
+  "V3": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/V3.png", name: "3ª Trifoliolada", description: "Terceira folha trifoliolada expandida", dapRange: "16-20" },
+  "V4": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/V4.png", name: "4ª Trifoliolada", description: "Quarta folha trifoliolada expandida", dapRange: "20-24" },
+  "V5": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/V5.png", name: "5ª Trifoliolada", description: "Quinta folha trifoliolada expandida", dapRange: "24-28" },
+  "R1": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R1.png", name: "Florescimento", description: "Primeiras flores abertas", dapRange: "28-35" },
+  "R2": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R2.png", name: "Floração Plena", description: "Pico de floração", dapRange: "35-42" },
+  "R3": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R3.png", name: "Vagens 1cm", description: "Vagens com 5mm a 1cm", dapRange: "42-50" },
+  "R4": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R4.png", name: "Vagens 2cm", description: "Vagens com 2cm", dapRange: "50-58" },
+  "R5.1": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R5.1.png", name: "Início Enchimento", description: "Grãos começam a se formar", dapRange: "58-65" },
+  "R5.3": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R5.3.png", name: "50% Enchimento", description: "Grãos atingem metade do tamanho", dapRange: "65-72" },
+  "R5.5": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R5.5.png", name: "100% Enchimento", description: "Grãos atingem tamanho máximo", dapRange: "72-78" },
+  "R6": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R6.png", name: "Grãos Formados", description: "Grãos totalmente formados", dapRange: "78-85" },
+  "R7": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R7.png", name: "Início Maturação", description: "Primeiras folhas amarelam", dapRange: "85-95" },
+  "R8": { icon: "https://raw.githubusercontent.com/seu-usuario/seu-repo/main/R8.png", name: "Maturação Plena", description: "Plantas senescentes, colheita possível", dapRange: "95+" }
 };
 
 const categories = {
@@ -379,7 +395,6 @@ const loadFromStorage = () => {
   document.getElementById('stageSelect').value = data.stageSelect || '';
   if (data.stageSelect) showStageInfo();
 
-  // Atualiza UI das categorias
   document.querySelectorAll('.category-item').forEach(el => {
     const id = el.getAttribute('data-id');
     if (id && selectedCategories.has(id)) {
@@ -391,7 +406,6 @@ const loadFromStorage = () => {
   renderPhotos();
 };
 
-// Atribui data-id para seleção
 document.querySelectorAll('.category-item').forEach((el, i) => {
   const ids = ['doenca','insetos','ervas','nutrientes','agua'];
   el.setAttribute('data-id', ids[i]);
@@ -401,22 +415,18 @@ document.querySelectorAll('.category-item').forEach((el, i) => {
 document.addEventListener('DOMContentLoaded', function() {
   try {
     document.getElementById('data').valueAsDate = new Date();
-    // Tenta obter localização automaticamente
     getCurrentLocation();
   } catch (error) {
     console.error('Erro ao inicializar:', error);
   }
 
-  // Carregar dados salvos
   loadFromStorage();
 
-  // Auto-salvar em qualquer mudança
   document.querySelectorAll('input, textarea, select, [type="radio"], [type="checkbox"]').forEach(el => {
     el.addEventListener('input', saveToStorage);
     el.addEventListener('change', saveToStorage);
   });
 
-  // Salvar ao fechar
   window.addEventListener('beforeunload', saveToStorage);
 });
 
@@ -426,7 +436,7 @@ function showStageInfo() {
   const stageInfo = stages[stageKey];
   const stageDisplay = document.getElementById('stageDisplay');
   if (stageInfo) {
-    document.getElementById('stageIcon').textContent = stageInfo.icon;
+    document.getElementById('stageIcon').innerHTML = `<img src="${stageInfo.icon}" alt="${stageInfo.name}" style="width:60px;height:60px;object-fit:contain;">`;
     document.getElementById('stageName').textContent = stageInfo.name;
     document.getElementById('stageDescription').textContent = stageInfo.description;
     document.getElementById('stageDap').textContent = `DAP: ${stageInfo.dapRange}`;
@@ -515,7 +525,6 @@ function toggleNutrient(nutrientId, el) {
 }
 
 function selectSeverity(cat, levelId, value, el) {
-  // Remover seleção anterior
   document.querySelectorAll(`.severity-option`).forEach(btn => {
     if (btn.closest('.section') === el.closest('.section')) {
       btn.classList.remove('selected');
@@ -705,6 +714,17 @@ async function exportToPDF() {
       yPosition += 8;
       addSection('Estádio:', `${stage.name} (${stage.dapRange} DAP)`);
       if (stage.description) addSection('Descrição:', stage.description);
+      
+      // Adicionar imagem do estádio no PDF
+      if (stage.icon && stage.icon.startsWith('http')) {
+        try {
+          if (yPosition + 25 > 277) { pdf.addPage(); yPosition = margin; }
+          pdf.addImage(stage.icon, 'PNG', margin, yPosition, 25, 25);
+          yPosition += 30;
+        } catch (err) {
+          console.warn('Falha ao carregar imagem no PDF:', stage.icon);
+        }
+      }
     }
 
     // Categorias Selecionadas
@@ -788,4 +808,15 @@ async function exportToPDF() {
 </script>
 </body>
 </html>
+```
 
+---
+
+### ✅ Próximos passos:
+
+1. **Substitua todas as URLs** em `stages` pelos links reais do seu GitHub (ex: `https://raw.githubusercontent.com/seu-usuario/seu-repo/main/VE.png`).
+2. Certifique-se de que as imagens estão **públicas** e carregam corretamente no navegador.
+3. Teste no celular e desktop.
+4. (Opcional) Reduza o tamanho das imagens PNG com ferramentas como [TinyPNG](https://tinypng.com/) para carregar mais rápido.
+
+Se quiser, posso te ajudar a gerar os links ou até um script para automatizar isso!
