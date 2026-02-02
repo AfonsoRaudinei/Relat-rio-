@@ -39,7 +39,7 @@ function showSaveIndicator(state) {
 // ========================================
 // COMPRESSÃO DE IMAGENS
 // ========================================
-function compressImage(file, maxWidth = 1200, quality = 0.85) {
+function compressImage(file, maxWidth = 1600, quality = 0.92) {
     return new Promise((resolve, reject) => {
         // Validar tamanho (máx 5MB antes de comprimir)
         if (file.size > 5 * 1024 * 1024) {
@@ -72,7 +72,9 @@ function compressImage(file, maxWidth = 1200, quality = 0.85) {
                 canvas.width = width;
                 canvas.height = height;
                 
-                // Desenhar imagem redimensionada
+                // Desenhar imagem redimensionada com alta qualidade
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 // Converter para base64 com compressão
@@ -799,7 +801,7 @@ document.addEventListener('click', function(event) {
 });
 
 // ========================================
-// EXPORTAÇÃO PARA PDF
+// EXPORTAÇÃO PARA PDF - QUALIDADE SUPERIOR
 // ========================================
 async function exportToPDF() {
     const { jsPDF } = window.jspdf;
@@ -839,21 +841,27 @@ async function exportToPDF() {
     });
     
     try {
-        // Capturar o conteúdo
+        // Capturar o conteúdo com ALTA QUALIDADE
         const container = document.querySelector('.container');
         const canvas = await html2canvas(container, {
-            scale: 2,
+            scale: 3,
             useCORS: true,
             logging: false,
-            backgroundColor: '#f5f5f7'
+            backgroundColor: '#f5f5f7',
+            allowTaint: true,
+            imageTimeout: 0,
+            removeContainer: false,
+            windowWidth: container.scrollWidth,
+            windowHeight: container.scrollHeight
         });
         
         // Criar PDF
-        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const imgData = canvas.toDataURL('image/jpeg', 0.98);
         const pdf = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',
-            format: 'a4'
+            format: 'a4',
+            compress: true
         });
         
         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -877,7 +885,9 @@ async function exportToPDF() {
                 imgX,
                 -i * pdfHeight,
                 imgWidth * ratio,
-                imgHeight * ratio
+                imgHeight * ratio,
+                undefined,
+                'FAST'
             );
         }
         
